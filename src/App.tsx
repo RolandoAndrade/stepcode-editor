@@ -56,10 +56,12 @@ function App() {
   return (
     <Editor
       height="100vh"
+      width={'100%'}
       defaultLanguage="Pseudocode-ES"
       defaultValue="// some comment"
       options={{
         minimap: { enabled: false },
+        autoIndent: 'full',
       }}
       onChange={(value) => {
         const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
