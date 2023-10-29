@@ -118,7 +118,20 @@ const constantsKeywords = ["verdadero", "falso", "true", "false"];
 const operatorsKeywords = ["es", "no", "distinto de", "igual a", "mayor que", "menor que", "mayor o igual a", "menor o igual a", "==", "=", "!=", "<", ">", "<=", ">="];
 const controlTypeKeywords = ["de otro modo", "repetir", "hasta que", "para", "finpara", "hasta", "con paso", "funcion", "finfuncion", "si", "entonces", "sino", "escoger", "caso", "mientras", "finmientras", "segun", "finsegun", "hacer", "finsi"];
 const logicKeywords = ["o", "y", "no", "or", "and", "not", "then"];
-const arrows = ["<-", "->", ":="];
+const arrows = ["←", "≠", "≤", "≥", "→"]
+
+export const allKeywords = [
+  ...controlKeywords,
+  ...processKeywords,
+  ...internalFunctions,
+  ...typesKeywords,
+  ...constantsKeywords,
+  ...operatorsKeywords,
+  ...controlTypeKeywords,
+  ...logicKeywords,
+  ...arrows
+]
+
 export const languageSyntax: monaco.languages.IMonarchLanguage = {
   controlKeywords,
   processKeywords,
@@ -133,8 +146,6 @@ export const languageSyntax: monaco.languages.IMonarchLanguage = {
   unicode: true,
   tokenizer: {
     root: [
-      // check for arrows (->, <-, :=)
-      [/<-/, { token: 'keyword.constant', bracket: '@open', next: '@arrow' }],
       [/[a-z_$][\w$]*/, {
       log: 'identifier',
       cases: {
@@ -165,12 +176,7 @@ export const languageSyntax: monaco.languages.IMonarchLanguage = {
       [/\/\/.*$/, "comment"],
       // comments with #
       [/#[^\n]*$/, "comment"],
-    ],
-    arrow: [
-      [/[^<\-]/, 'keyword.control'],
-      [/<-/, { token: 'keyword.control', bracket: '@open', next: '@arrow' }],
-      [/$/, { token: 'keyword.control', bracket: '@close', next: '@pop' }],
-    ],
+    ]
   }
 }
 

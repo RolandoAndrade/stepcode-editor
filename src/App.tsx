@@ -1,9 +1,11 @@
 import './App.css'
 import { Editor, useMonaco } from '@monaco-editor/react';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 import { languageConfiguration } from './core/language/configuration/configuration.config.ts';
 import { languageSyntax } from './core/language/syntax/syntax.config.ts';
 import { colors } from './core/colors/colors.ts';
+import { languages } from 'monaco-editor';
+import { createCompletionItems } from './core/language/syntax/completion-items.ts';
 
 function App() {
   const monaco = useMonaco();
@@ -13,6 +15,18 @@ function App() {
     monaco.languages.register({ id: 'Pseudocode-ES' });
     monaco.languages.setLanguageConfiguration('Pseudocode-ES', languageConfiguration);
     monaco.languages.setMonarchTokensProvider('Pseudocode-ES', languageSyntax);
+    monaco.languages.registerCompletionItemProvider('Pseudocode-ES', {
+      provideCompletionItems: (model, position, ) => {
+        const word = model.getWordUntilPosition(position);
+        const suggestions: languages.CompletionItem[] = createCompletionItems({
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn,
+        })
+        return { suggestions };
+      }
+    })
     monaco.editor.defineTheme('Pseudocode-ES', {
       base: 'vs-dark', colors: {
         'editor.background': colors.black,
@@ -48,7 +62,7 @@ function App() {
         minimap: { enabled: false },
       }}
       onChange={(value) => {
-        const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('==', '≡')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
+        const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
         if (value !== newValue) {
           const lastPosition = monaco?.editor?.getEditors()[0].getPosition()
           monaco?.editor?.getEditors()[0].setValue(newValue || '');
