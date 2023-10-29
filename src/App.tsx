@@ -6,6 +6,7 @@ import { languageSyntax } from './core/language/syntax/syntax.config.ts';
 import { colors } from './core/colors/colors.ts';
 import { languages } from 'monaco-editor';
 import { createCompletionItems } from './core/language/syntax/completion-items.ts';
+import { Terminal } from './components/terminal/terminal.tsx';
 
 function App() {
   const monaco = useMonaco();
@@ -54,25 +55,29 @@ function App() {
 
 
   return (
-    <Editor
-      height="100vh"
-      width={'100%'}
-      defaultLanguage="Pseudocode-ES"
-      defaultValue="// some comment"
-      options={{
-        minimap: { enabled: false },
-        autoIndent: 'full',
-      }}
-      onChange={(value) => {
-        const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
-        if (value !== newValue) {
-          const lastPosition = monaco?.editor?.getEditors()[0].getPosition()
-          monaco?.editor?.getEditors()[0].setValue(newValue || '');
-          monaco?.editor.getEditors()[0].setPosition({ column: (lastPosition?.column || 1) - 1, lineNumber: lastPosition?.lineNumber || 0});
-        }
-      }}
+    <>
+      <Editor
+        height="100vh"
+        width={'100%'}
+        defaultLanguage="Pseudocode-ES"
+        defaultValue="// some comment"
+        options={{
+          minimap: { enabled: false },
+          autoIndent: 'full',
+        }}
+        onChange={(value) => {
+          const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
+          if (value !== newValue) {
+            const lastPosition = monaco?.editor?.getEditors()[0].getPosition()
+            monaco?.editor?.getEditors()[0].setValue(newValue || '');
+            monaco?.editor.getEditors()[0].setPosition({ column: (lastPosition?.column || 1) - 1, lineNumber: lastPosition?.lineNumber || 0});
+          }
+        }}
 
-    />
+      />
+      <Terminal></Terminal>
+    </>
+
   )
 }
 
