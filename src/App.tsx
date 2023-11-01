@@ -6,7 +6,7 @@ import { languageSyntax } from './core/language/syntax/syntax.config.ts';
 import { colors } from './core/colors/colors.ts';
 import { languages } from 'monaco-editor';
 import { createCompletionItems } from './core/language/syntax/completion-items.ts';
-import { Terminal } from './components/terminal/terminal.tsx';
+import { TerminalContainer } from './components/terminal/terminal-container.tsx';
 
 function App() {
   const monaco = useMonaco();
@@ -75,7 +75,7 @@ function App() {
         }}
 
       />
-      <Terminal></Terminal>
+      <TerminalContainer></TerminalContainer>
     </>
   )
 }
