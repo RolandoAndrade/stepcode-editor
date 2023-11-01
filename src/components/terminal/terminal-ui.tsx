@@ -28,7 +28,7 @@ export function TerminalUI ({coordinates, width, height, toggleMaximize, minimiz
                     className="w-3 h-3 rounded-full bg-red-500 mr-2"></button>
             <button onClick={minimize} className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></button>
             <button onClick={toggleMaximize} className="w-3 h-3 rounded-full bg-green-500 mr-2"></button>
-            <div className="w-full h-3 rounded-full" {...listeners} {...attributes}></div>
+            <div className={`w-full h-3 rounded-full ${attributes['aria-pressed'] ? 'cursor-grabbing' : 'cursor-grab'}` } {...listeners} {...attributes}></div>
           </div>
           <div className="flex">
             <span className="text-green-500 mr-1">guest@terminal:</span>

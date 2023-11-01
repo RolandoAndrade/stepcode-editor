@@ -1,20 +1,26 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { TerminalUI } from './terminal-ui.tsx';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 export function Terminal() {
-  const [width, setWidth] = useState(500)
-  const [height, setHeight] = useState(200)
+
   const [maximized, setMaximized] = useState(false)
   const [minimized, setMinimized] = useState(false)
+  const windowSize = useWindowSize()
+  const [terminalDimensions, setTerminalDimensions] = useState({width: 500, height: 200})
 
   function maximize() {
     setMaximized(true)
-    setWidth(window.innerWidth)
-    setHeight(window.innerHeight)
     setCoordinates({x: 0, y: 0})
   }
+
+  useEffect(() => {
+    if (maximized) {
+      setTerminalDimensions(windowSize as {width: number, height: number})
+    }
+  }, [maximized, windowSize.width, windowSize.height])
 
   function toggleMaximize() {
     if (maximized) {
@@ -26,8 +32,7 @@ export function Terminal() {
 
   function normalize() {
     setMaximized(false)
-    setWidth(500)
-    setHeight(200)
+    setTerminalDimensions({width: 500, height: 200})
     setCoordinates({x: window.innerWidth / 2 - 250, y: window.innerHeight / 2 - 100})
   }
 
@@ -92,7 +97,7 @@ export function Terminal() {
                   leaveTo="opacity-0 scale-95"
                 >
                   <div>
-                    <TerminalUI coordinates={coordinates} width={width} height={height} toggleMaximize={toggleMaximize} minimize={minimize}></TerminalUI>
+                    <TerminalUI coordinates={coordinates} width={terminalDimensions.width} height={terminalDimensions.height} toggleMaximize={toggleMaximize} minimize={minimize}></TerminalUI>
                   </div>
                 </Transition.Child>
               </div>
