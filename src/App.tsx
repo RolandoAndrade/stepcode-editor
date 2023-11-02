@@ -6,6 +6,8 @@ import { languageSyntax } from './core/language/syntax/syntax.config.ts';
 import { colors } from './core/colors/colors.ts';
 import { languages } from 'monaco-editor';
 import { createCompletionItems } from './core/language/syntax/completion-items.ts';
+import { Toolbar } from './components/toolbar/toolbar.tsx';
+import { Panel, PanelGroup, PanelResizeHandle } from 'react-resizable-panels';
 import { TerminalContainer } from './components/terminal/terminal-container.tsx';
 
 function App() {
@@ -55,15 +57,16 @@ function App() {
 
 
   return (
-    <>
+    <div className={'w-full h-full flex flex-1 flex-col bg-oneDarkBlackDarker'}>
+      <Toolbar />
       <Editor
-        height="100vh"
         width={'100%'}
         defaultLanguage="Pseudocode-ES"
-        defaultValue="// some comment"
+        defaultValue=""
         options={{
           minimap: { enabled: false },
           autoIndent: 'full',
+          mouseWheelZoom: true,
         }}
         onChange={(value) => {
           const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
@@ -75,8 +78,8 @@ function App() {
         }}
 
       />
-      <TerminalContainer></TerminalContainer>
-    </>
+      <TerminalContainer />
+    </div>
   )
 }
 

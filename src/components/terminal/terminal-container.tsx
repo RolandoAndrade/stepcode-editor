@@ -2,8 +2,10 @@ import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { Terminal } from './terminal.tsx';
 import { useEffect, useState } from 'react';
 import { useWindowSize } from '@uidotdev/usehooks';
+import { useExecutionContext } from '../execution-context.tsx';
 
 export function TerminalContainer() {
+  const {isRunning, stop} = useExecutionContext()
 
   const [maximized, setMaximized] = useState(false)
   const [terminalDimensions, setTerminalDimensions] = useState({width: 500, height: 200})
@@ -21,6 +23,10 @@ export function TerminalContainer() {
       };
     });
   }
+
+  useEffect(() => {
+    setMinimized(!isRunning)
+  }, [isRunning])
 
   function maximize() {
     setMaximized(true)
@@ -42,15 +48,22 @@ export function TerminalContainer() {
   }
 
   useEffect(() => {
+    if (windowSize.width! < 500) {
+      maximize()
+    }
     if (maximized) {
       setTerminalDimensions(windowSize as {width: number, height: number})
     }
   }, [maximized, windowSize.width, windowSize.height])
 
+  function close(){
+    stop()
+  }
+
   return (
     <DndContext onDragEnd={dragEnd}>
-      minimize && <Terminal coordinates={coordinates} terminalDimensions={terminalDimensions} maximized={maximized} maximize={maximize}
-      normalize={normalize} minimize={minimize}></Terminal>
+      {!minimized && <Terminal coordinates={coordinates} terminalDimensions={terminalDimensions} maximized={maximized} maximize={maximize}
+      normalize={normalize} minimize={minimize} close={close}></Terminal>}
     </DndContext>
   )
 }
