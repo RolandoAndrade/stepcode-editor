@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
@@ -6,6 +6,7 @@ import { TerminalButtons } from './buttons/terminal-buttons.tsx';
 import { TerminalInput } from './io/terminal-input.tsx';
 import { TerminalOutput } from './io/terminal-output.tsx';
 import { useExecutionContext } from '../execution-context.tsx';
+import './terminal.css'
 
 type Props = {
   coordinates: {x: number, y: number},
@@ -29,6 +30,15 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
     id: 'draggable-1',
   });
+
+  const terminalContentRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    terminalContentRef.current!.scrollTo({
+      top: terminalContentRef.current!.scrollHeight,
+      behavior: 'smooth'
+    })
+  }, [terminalContent.length])
 
   return (
       <Transition show={true} appear as={Fragment}>
@@ -78,15 +88,16 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                           <TerminalButtons onClick={toggleMaximize} hint={maximized ? `Restore` : `Maximize`} color={'bg-green-500'}/>
                           <div className={`w-full h-3 rounded-full ${attributes['aria-pressed'] ? 'cursor-grabbing' : 'cursor-grab'}` } {...listeners} {...attributes}></div>
                         </div>
-                        {
-                          terminalContent.map((content, index) => {
-                            if (content.type === 'input') {
-                              return <TerminalInput key={`terminal-${index}`} onSend={content.onSend}/>
-                            }
-                            return <TerminalOutput key={`terminal-${index}`}>{content.content}</TerminalOutput>
-                          })
-                        }
-  
+                        <div className={'overflow-y-auto terminal-scrollbar'} ref={terminalContentRef}>
+                          {
+                            terminalContent.map((content, index) => {
+                              if (content.type === 'input') {
+                                return <TerminalInput key={`terminal-${index}`} onSend={content.onSend}/>
+                              }
+                              return <TerminalOutput key={`terminal-${index}`}>{content.content}</TerminalOutput>
+                            })
+                          }
+                        </div>
                       </div>
                     </Dialog.Panel>
                   </div>                </div>
