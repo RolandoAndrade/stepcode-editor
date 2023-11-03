@@ -15,6 +15,7 @@ export function TerminalInput({onSend}: Props) {
     <form className="flex" onSubmit={send}>
       <span className="text-green-500 mr-1">{`>>`}</span>
       <input
+        autoFocus={!disabled}
         disabled={disabled}
         type="text"
         name={'terminal-input'}

@@ -1,6 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { TerminalInput } from './terminal/io/terminal-input.tsx';
 
+import { StepCodeInterpreter, EventBus, interpret } from 'stepcode';
+import { useEditor } from './editor-context.tsx';
+
 type TerminalInput = {
   type: 'input',
   onSend: (input: string) => void,
@@ -33,7 +36,11 @@ const ExecutionContextContext = createContext<ExecutionContext>({
   terminalContent: [],
 })
 
+
 export function ExecutionContextProvider({children}: {children: React.ReactNode}) {
+  const {content} = useEditor()
+  const eventBus = new EventBus();
+  const interpreter = new StepCodeInterpreter(eventBus)
 
   const [isRunning, setIsRunning] = useState<boolean>(false)
 
@@ -41,18 +48,25 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
 
   const [terminalContent, setTerminalContent] = useState<TerminalIO[]>([])
 
+  eventBus.on('output-request', (output: string) => {
+    setTerminalContent(prev => [
+      ...prev,
+      {type: 'output', content: output},
+    ])
+  })
 
+  eventBus.on('input-request', (resolve: (input: string) => void) => {
+    setTerminalContent(prev => [
+      ...prev,
+      {type: 'input', onSend: resolve},
+    ])
+  })
 
 
   function play() {
     setIsRunning(true)
     setTerminalContent([])
-    setTimeout(() => {
-      setTerminalContent(prev => [
-        ...prev,
-        {type: 'output', content: 'Hello World!'},
-      ])
-    }, 1000)
+    interpret(content, interpreter)
   }
 
   function stop() {
