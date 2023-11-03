@@ -110,9 +110,9 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
  *       }}>
  *         <div className="bg-black text-white font-mono p-4 rounded-lg w-full h-full transition-all duration-300">
  *           <div className="flex items-center mb-2">
- *             <button onClick={()=>console.log('closed')} className="w-3 h-3 rounded-full bg-red-500 mr-2"></button>
- *             <button onClick={minimize} className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></button>
- *             <button onClick={toggleMaximize} className="w-3 h-3 rounded-full bg-green-500"></button>
+ *             <buttons onClick={()=>console.log('closed')} className="w-3 h-3 rounded-full bg-red-500 mr-2"></buttons>
+ *             <buttons onClick={minimize} className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></buttons>
+ *             <buttons onClick={toggleMaximize} className="w-3 h-3 rounded-full bg-green-500"></buttons>
  *           </div>
  *           <div className="flex">
  *             <span className="text-green-500 mr-1">guest@terminal:</span>
