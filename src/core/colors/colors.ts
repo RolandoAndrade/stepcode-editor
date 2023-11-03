@@ -40,6 +40,6 @@ export const colors = {
   blue: '#61afef',
   magenta: '#c678dd',
   cyan: '#56b6c2',
-  gutterGrey: '#4b5263',
+  gutterGrey: '#313641',
   commentGrey: '#5c6370',
 }

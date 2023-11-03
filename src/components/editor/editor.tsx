@@ -31,6 +31,7 @@ export function Editor() {
     monaco.editor.defineTheme('Pseudocode-ES', {
       base: 'vs-dark', colors: {
         'editor.background': colors.black,
+        'editor.lineHighlightBackground': colors.gutterGrey,
       }, inherit: true,
       rules: [
         { token: 'comment', foreground: colors.commentGrey },
@@ -61,7 +62,11 @@ export function Editor() {
         options={{
           minimap: { enabled: false },
           autoIndent: 'full',
-          mouseWheelZoom: true
+          mouseWheelZoom: true,
+          automaticLayout: true,
+          cursorBlinking: 'phase',
+          cursorSmoothCaretAnimation: 'on',
+          renderLineHighlight: 'all',
         }}
         onChange={(value) => {
           const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');

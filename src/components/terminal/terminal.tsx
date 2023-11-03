@@ -32,9 +32,8 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
   });
 
   const terminalContentRef = useRef<HTMLDivElement | null>(null)
-
   useEffect(() => {
-    terminalContentRef.current!.scrollTo({
+    terminalContentRef.current?.scrollTo({
       top: terminalContentRef.current!.scrollHeight,
       behavior: 'smooth'
     })
@@ -77,7 +76,7 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                     }}
                   >
                     <Dialog.Panel
-                      className="bg-black transform overflow-hidden rounded-2xl text-left text-white font-mono align-middle shadow-xl transition-all" style={{
+                      className="text-sm bg-black transform overflow-hidden rounded-2xl text-left text-white font-mono align-middle shadow-xl transition-all" style={{
                       width: terminalDimensions.width,
                       height: terminalDimensions.height,
                     }}>
@@ -88,13 +87,15 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                           <TerminalButtons onClick={toggleMaximize} hint={maximized ? `Restore` : `Maximize`} color={'bg-green-500'}/>
                           <div className={`w-full h-3 rounded-full ${attributes['aria-pressed'] ? 'cursor-grabbing' : 'cursor-grab'}` } {...listeners} {...attributes}></div>
                         </div>
-                        <div className={'overflow-y-auto terminal-scrollbar'} ref={terminalContentRef}>
+                        <div className={'overflow-y-auto terminal-scrollbar'} ref={terminalContentRef} onClick={() => {
+                          terminalContentRef.current?.focus()
+                        }}>
                           {
-                            terminalContent.map((content, index) => {
+                            terminalContent.map((content) => {
                               if (content.type === 'input') {
-                                return <TerminalInput key={`terminal-${index}`} onSend={content.onSend}/>
+                                return <TerminalInput key={`${content.id}`} onSend={content.onSend}/>
                               }
-                              return <TerminalOutput key={`terminal-${index}`}>{content.content}</TerminalOutput>
+                              return <TerminalOutput key={`${content.id}`}>{content.content}</TerminalOutput>
                             })
                           }
                         </div>
@@ -109,36 +110,3 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
 
   )
 }
-
-/**
- * <div className="bg-transparent fixed inset-0 flex flex-1 items-center justify-center backdrop-filter backdrop-blur-[2px] bg-black bg-opacity-30" style={{
- *       display: minimized ? 'none' : 'flex',
- *     }}>
- *       <section className="bg-transparent rounded-lg shadow-lg overflow-hidden" style={{
- *         width: width,
- *         height: height,
- *       }}>
- *         <div className="bg-black text-white font-mono p-4 rounded-lg w-full h-full transition-all duration-300">
- *           <div className="flex items-center mb-2">
- *             <buttons onClick={()=>console.log('closed')} className="w-3 h-3 rounded-full bg-red-500 mr-2"></buttons>
- *             <buttons onClick={minimize} className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></buttons>
- *             <buttons onClick={toggleMaximize} className="w-3 h-3 rounded-full bg-green-500"></buttons>
- *           </div>
- *           <div className="flex">
- *             <span className="text-green-500 mr-1">guest@terminal:</span>
- *             <span className="text-gray-400">~$</span>
- *             <input
- *               type="text"
- *               className="bg-transparent ml-1 focus:outline-none"
- *             />
- *           </div>
- *           <div className="mt-2">
- *         <pre className="text-gray-300">
- *           {`Welcome to the terminal!
- * Type 'help' to see available commands.`}
- *         </pre>
- *           </div>
- *         </div>
- *       </section>
- *     </div>
- */

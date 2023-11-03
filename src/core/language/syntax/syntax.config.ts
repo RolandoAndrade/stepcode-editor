@@ -115,7 +115,7 @@ const processKeywords = ["proceso", "finproceso", "algoritmo", "inicio", "fin", 
 const internalFunctions = ["raiz", "rc", "abs", "ln", "exp", "sen", "cos", "tan", "asen", "acos", "atan", "trunc", "redon", "azar", "aleatorio", "longitud", "mayusculas", "minusculas", "subcadenas", "concatenar", "convertiranumero", "convertiratexto"];
 const typesKeywords = ["void", "real", "entero", "caracter", "literal", "lógico", "logico", "cadena"];
 const constantsKeywords = ["verdadero", "falso", "true", "false"];
-const operatorsKeywords = ["es", "no", "distinto de", "igual a", "mayor que", "menor que", "mayor o igual a", "menor o igual a", "==", "=", "!=", "<", ">", "<=", ">="];
+const operatorsKeywords = ["es", "no", "distinto de", "igual a", "mayor que", "menor que", "mayor o igual a", "menor o igual a", "==", "=", "!=", "<", ">", "<=", ">=", "div", "mod"];
 const controlTypeKeywords = ["de otro modo", "repetir", "hasta que", "para", "finpara", "hasta", "con paso", "funcion", "finfuncion", "si", "entonces", "sino", "escoger", "caso", "mientras", "finmientras", "segun", "finsegun", "hacer", "finsi"];
 const logicKeywords = ["o", "y", "no", "or", "and", "not", "then"];
 const arrows = ["←", "≠", "≤", "≥", "→"]
@@ -147,7 +147,6 @@ export const languageSyntax: monaco.languages.IMonarchLanguage = {
   tokenizer: {
     root: [
       [/[a-z_$][\w$]*/, {
-      log: 'identifier',
       cases: {
         // Control keywords
         '@controlKeywords': 'keyword.control' ,

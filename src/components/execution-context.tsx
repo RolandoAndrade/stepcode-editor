@@ -5,11 +5,13 @@ import { StepCodeInterpreter, EventBus, interpret } from 'stepcode';
 import { useEditor } from './editor-context.tsx';
 
 type TerminalInput = {
+  id: string,
   type: 'input',
   onSend: (input: string) => void,
 }
 
 type TerminalOutput = {
+  id: string,
   type: 'output',
   content: string,
 }
@@ -51,14 +53,14 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
   eventBus.on('output-request', (output: string) => {
     setTerminalContent(prev => [
       ...prev,
-      {type: 'output', content: output},
+      {type: 'output', content: output, id: crypto.randomUUID()},
     ])
   })
 
   eventBus.on('input-request', (resolve: (input: string) => void) => {
     setTerminalContent(prev => [
       ...prev,
-      {type: 'input', onSend: resolve},
+      {type: 'input', onSend: resolve, id: crypto.randomUUID()},
     ])
   })
 
@@ -66,7 +68,12 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
   function play() {
     setIsRunning(true)
     setTerminalContent([])
-    interpret(content, interpreter)
+    interpret(content, interpreter).then(() => {
+      setTerminalContent(prev => [
+        ...prev,
+        {type: 'output', content: '\nLa ejecución ha finalizado...', id: crypto.randomUUID()},
+      ])
+    })
   }
 
   function stop() {
