@@ -2,6 +2,10 @@ import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import { TerminalButtons } from './buttons/terminal-buttons.tsx';
+import { TerminalInput } from './io/terminal-input.tsx';
+import { TerminalOutput } from './io/terminal-output.tsx';
+import { useExecutionContext } from '../execution-context.tsx';
 
 type Props = {
   coordinates: {x: number, y: number},
@@ -13,7 +17,7 @@ type Props = {
   close: () => void,
 }
 export function Terminal({coordinates, maximize, normalize, maximized, terminalDimensions, minimize, close}: Props) {
-
+  const {terminalContent} = useExecutionContext()
   function toggleMaximize() {
     if (maximized) {
       normalize()
@@ -67,27 +71,22 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                       width: terminalDimensions.width,
                       height: terminalDimensions.height,
                     }}>
-                      <div className="bg-black text-white p-4 font-mono rounded-lg w-full h-full transition-all duration-300">
-                        <div className="flex items-center mb-2">
-                          <button onClick={close}
-                                  className="w-3 h-3 rounded-full bg-red-500 mr-2"></button>
-                          <button onClick={minimize} className="w-3 h-3 rounded-full bg-yellow-500 mr-2"></button>
-                          <button onClick={toggleMaximize} className="w-3 h-3 rounded-full bg-green-500 mr-2"></button>
+                      <div className="bg-oneDarkBlack text-white p-4 font-mono rounded-lg w-full h-full transition-all duration-300 flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <TerminalButtons onClick={close} hint={'Stop'} color={'bg-red-500'}/>
+                          <TerminalButtons onClick={minimize} hint={'Minimize'} color={'bg-yellow-500'}/>
+                          <TerminalButtons onClick={toggleMaximize} hint={maximized ? `Restore` : `Maximize`} color={'bg-green-500'}/>
                           <div className={`w-full h-3 rounded-full ${attributes['aria-pressed'] ? 'cursor-grabbing' : 'cursor-grab'}` } {...listeners} {...attributes}></div>
                         </div>
-                        <div className="flex">
-                          <span className="text-green-500 mr-1">{`>>`}</span>
-                          <input
-                            type="text"
-                            className="bg-transparent ml-1 focus:outline-none"
-                          />
-                        </div>
-                        <div className="mt-2">
-                    <pre className="text-gray-300">
-                      {`Welcome to the terminal!
-            Type 'help' to see available commands.`}
-                    </pre>
-                        </div>
+                        {
+                          terminalContent.map((content, index) => {
+                            if (content.type === 'input') {
+                              return <TerminalInput key={`terminal-${index}`} onSend={content.onSend}/>
+                            }
+                            return <TerminalOutput key={`terminal-${index}`}>{content.content}</TerminalOutput>
+                          })
+                        }
+  
                       </div>
                     </Dialog.Panel>
                   </div>                </div>
