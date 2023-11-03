@@ -75,7 +75,7 @@ export function Editor() {
       />
       {!(content?.length) && (
         <div data-mprt="1" className={'pointer-events-none text-oneDarkCommentGrey'} style={{ position: 'absolute', top: '0px', left: '61px' }}>
-          <div className="empty-editor-hint" widgetid="editor.widget.emptyHint" style={{ width: 'max-content', paddingLeft: '4px', fontFamily: 'Consolas, "Courier New", monospace', fontWeight: 'normal', fontSize: '14px', fontFeatureSettings: '"liga" 0, "calt" 0', fontVariationSettings: 'normal', lineHeight: '19px', letterSpacing: '0px', position: 'absolute', display: 'block', visibility: 'inherit', maxWidth: '564px', top: '0px', left: '0px' }} monaco-visible-content-widget="true">
+          <div className="empty-editor-hint" style={{ width: 'max-content', paddingLeft: '4px', fontFamily: 'Consolas, "Courier New", monospace', fontWeight: 'normal', fontSize: '14px', fontFeatureSettings: '"liga" 0, "calt" 0', fontVariationSettings: 'normal', lineHeight: '19px', letterSpacing: '0px', position: 'absolute', display: 'block', visibility: 'inherit', maxWidth: '564px', top: '0px', left: '0px' }}>
             <div style={{ fontStyle: 'italic' }}>
               Empiece a escribir para descartar o <a title="" style={{ cursor: 'pointer' }}>no mostrar</a> esto de nuevo.
             </div>
