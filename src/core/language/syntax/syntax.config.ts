@@ -116,7 +116,7 @@ const internalFunctions = ["raiz", "rc", "abs", "ln", "exp", "sen", "cos", "tan"
 const typesKeywords = ["void", "real", "entero", "caracter", "literal", "lógico", "logico", "cadena"];
 const constantsKeywords = ["verdadero", "falso", "true", "false"];
 const operatorsKeywords = ["es", "no", "distinto de", "igual a", "mayor que", "menor que", "mayor o igual a", "menor o igual a", "==", "=", "!=", "<", ">", "<=", ">=", "div", "mod"];
-const controlTypeKeywords = ["de otro modo", "repetir", "hasta que", "para", "finpara", "hasta", "con paso", "funcion", "finfuncion", "si", "entonces", "sino", "escoger", "caso", "mientras", "finmientras", "segun", "finsegun", "hacer", "finsi"];
+const controlTypeKeywords = ["sino si", "de otro modo", "repetir", "hasta que", "para", "finpara", "hasta", "con paso", "funcion", "finfuncion", "si", "entonces", "sino", "escoger", "caso", "mientras", "finmientras", "segun", "finsegun", "hacer", "finsi"];
 const logicKeywords = ["o", "y", "no", "or", "and", "not", "then"];
 const arrows = ["←", "≠", "≤", "≥", "→"]
 

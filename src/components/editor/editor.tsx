@@ -65,7 +65,6 @@ export function Editor() {
           mouseWheelZoom: true,
           automaticLayout: true,
           cursorBlinking: 'phase',
-          cursorSmoothCaretAnimation: 'on',
           renderLineHighlight: 'all',
         }}
         onChange={(value) => {
