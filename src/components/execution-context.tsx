@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { TerminalInput } from './terminal/io/terminal-input.tsx';
 
-import { StepCodeInterpreter, EventBus, interpret } from 'stepcode';
+import { EventBus, interpret } from 'stepcode';
 import { useEditor } from './editor-context.tsx';
 
 type TerminalInput = {
@@ -42,7 +42,6 @@ const ExecutionContextContext = createContext<ExecutionContext>({
 export function ExecutionContextProvider({children}: {children: React.ReactNode}) {
   const {content} = useEditor()
   const eventBus = new EventBus();
-  const interpreter = new StepCodeInterpreter(eventBus)
 
   const [isRunning, setIsRunning] = useState<boolean>(false)
 
@@ -68,7 +67,10 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
   function play() {
     setIsRunning(true)
     setTerminalContent([])
-    interpret(content, interpreter).then(() => {
+    interpret({
+      code: content,
+      eventBus
+    }).then(() => {
       setTerminalContent(prev => [
         ...prev,
         {type: 'output', content: '\nLa ejecución ha finalizado...', id: crypto.randomUUID()},
