@@ -28,14 +28,6 @@ export const languageConfiguration: monaco.languages.LanguageConfiguration = {
   // symbols that are auto closed when typing
   "autoClosingPairs": [
     {
-      "open": "Proceso",
-      "close": "FinProceso"
-    },
-    {
-      "open": "Algoritmo",
-      "close": "FinAlgoritmo"
-    },
-    {
       "open": "{",
       "close": "}"
     },

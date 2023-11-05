@@ -2,10 +2,10 @@ import { Editor as MonacoEditor, useMonaco } from '@monaco-editor/react';
 import { useEffect } from 'react';
 import { languageConfiguration } from '../../core/language/configuration/configuration.config.ts';
 import { languageSyntax } from '../../core/language/syntax/syntax.config.ts';
-import { languages } from 'monaco-editor';
-import { createCompletionItems } from '../../core/language/syntax/completion-items.ts';
-import { AtomOneLightColors, OneDarkColors } from '../../core/colors/oneDarkColors.ts';
 import { useEditor } from '../editor-context.tsx';
+import { darkTheme } from '../../core/colors/dark-theme.ts';
+import { lightTheme } from '../../core/colors/light-theme.ts';
+import { completionProvider } from '../../core/language/syntax/completion/completion-provider.ts';
 
 export function Editor() {
   const monaco = useMonaco();
@@ -14,54 +14,17 @@ export function Editor() {
   useEffect(() => {
     if (!monaco) return
     monaco.languages.register({ id: 'Pseudocode-ES' });
-    monaco.languages.setLanguageConfiguration('Pseudocode-ES', languageConfiguration);
-    monaco.languages.setMonarchTokensProvider('Pseudocode-ES', languageSyntax);
-    monaco.languages.registerCompletionItemProvider('Pseudocode-ES', {
-      provideCompletionItems: (model, position, ) => {
-        const word = model.getWordUntilPosition(position);
-        const suggestions: languages.CompletionItem[] = createCompletionItems({
-          startLineNumber: position.lineNumber,
-          endLineNumber: position.lineNumber,
-          startColumn: word.startColumn,
-          endColumn: word.endColumn,
-        })
-        return { suggestions };
-      }
-    })
-    monaco.editor.defineTheme('step-code', {
-      base: 'vs-dark', colors: {
-        'editor.background': OneDarkColors.black,
-        'editor.lineHighlightBackground': OneDarkColors.gutterGrey,
-      }, inherit: true,
-      rules: [
-        { token: 'comment', foreground: OneDarkColors.commentGrey },
-        { token: 'keyword.control', foreground: OneDarkColors.magenta, fontStyle: 'bold' },
-        { token: 'internal-function', foreground: OneDarkColors.cyan, fontStyle: 'italic' },
-        { token: 'keyword.type', foreground: OneDarkColors.lightYellow },
-        { token: 'keyword.constant', foreground: OneDarkColors.darkYellow},
-        { token: 'keyword.operator', foreground: OneDarkColors.magenta },
-        { token: 'number', foreground: OneDarkColors.darkYellow },
-        { token: 'string', foreground: OneDarkColors.green },
-      ]
-    })
-    monaco.editor.defineTheme('step-code-light', {
-      base: 'vs', colors: {
-        'editor.background': AtomOneLightColors.white,
-        'editor.lineHighlightBackground': AtomOneLightColors.gutterGrey,
-      }, inherit: true,
-      rules: [
-        { token: 'comment', foreground: AtomOneLightColors.commentGrey },
-        { token: 'keyword.control', foreground: AtomOneLightColors.magenta, fontStyle: 'bold' },
-        { token: 'internal-function', foreground: AtomOneLightColors.cyan, fontStyle: 'italic' },
-        { token: 'keyword.type', foreground: AtomOneLightColors.lightYellow },
-        { token: 'keyword.constant', foreground: AtomOneLightColors.darkYellow},
-        { token: 'keyword.operator', foreground: AtomOneLightColors.magenta },
-        { token: 'number', foreground: AtomOneLightColors.darkYellow },
-        { token: 'string', foreground: AtomOneLightColors.green },
-      ]
-    })
+    const { dispose: disposeLanguageConfig } = monaco.languages.setLanguageConfiguration('Pseudocode-ES', languageConfiguration);
+    const { dispose: disposeTokensProvider } = monaco.languages.setMonarchTokensProvider('Pseudocode-ES', languageSyntax);
+    const { dispose: disposeCompletionItemProvider } = monaco.languages.registerCompletionItemProvider('Pseudocode-ES', completionProvider)
+    monaco.editor.defineTheme('step-code', darkTheme)
+    monaco.editor.defineTheme('step-code-light', lightTheme)
     monaco.editor.setTheme('step-code');
-
+    return () => {
+      disposeLanguageConfig();
+      disposeTokensProvider();
+      disposeCompletionItemProvider();
+    }
   }, [monaco]);
   return (
     <div className={'relative w-full h-full'}>
