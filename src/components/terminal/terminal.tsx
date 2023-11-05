@@ -76,7 +76,7 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                     }}
                   >
                     <Dialog.Panel
-                      className="text-sm bg-black transform overflow-hidden rounded-2xl text-left text-white font-mono align-middle shadow-xl transition-all" style={{
+                      className="text bg-black transform overflow-hidden rounded-2xl text-left text-white font-mono align-middle shadow-xl transition-all" style={{
                       width: terminalDimensions.width,
                       height: terminalDimensions.height,
                     }}>

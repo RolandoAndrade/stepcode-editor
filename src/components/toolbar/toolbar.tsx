@@ -8,7 +8,7 @@ export function Toolbar() {
   const {isRunning, play, stop, showTerminal} = useExecutionContext()
 
   return (
-    <div className="flex flex-row justify-between items-center p-1 text-4xl sm:text-base px-3">
+    <div className="flex flex-row justify-between items-center p-1 text-xl px-3">
       <div className="flex flex-row justify-start items-center">
         <div className="flex flex-row justify-start items-center h-full gap-2">
           <ToolbarButton icon={HiOutlineMenu} onClick={()=>{}} hint={'Menu'}/>
