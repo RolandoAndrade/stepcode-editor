@@ -29,7 +29,7 @@
  * */
 
 
-export const colors = {
+export const OneDarkColors = {
   black: '#282c34',
   white: '#abb2bf',
   lightRed: '#e06c75',
@@ -42,4 +42,19 @@ export const colors = {
   cyan: '#56b6c2',
   gutterGrey: '#313641',
   commentGrey: '#5c6370',
+}
+
+export const AtomOneLightColors = {
+  black: '#383A42',
+  white: '#FAFAFA',
+  lightRed: '#e06c75',
+  darkRed: '#be5046',
+  green: '#50A14F',
+  lightYellow: '#C18401',
+  darkYellow: '#986801',
+  blue: '#526FFF',
+  magenta: '#A626A4',
+  cyan: '#0184BC',
+  gutterGrey: '#e8e8e8',
+  commentGrey: '#CFD0D1',
 }

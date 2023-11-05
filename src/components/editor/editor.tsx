@@ -4,7 +4,7 @@ import { languageConfiguration } from '../../core/language/configuration/configu
 import { languageSyntax } from '../../core/language/syntax/syntax.config.ts';
 import { languages } from 'monaco-editor';
 import { createCompletionItems } from '../../core/language/syntax/completion-items.ts';
-import { colors } from '../../core/colors/colors.ts';
+import { AtomOneLightColors, OneDarkColors } from '../../core/colors/oneDarkColors.ts';
 import { useEditor } from '../editor-context.tsx';
 
 export function Editor() {
@@ -28,29 +28,39 @@ export function Editor() {
         return { suggestions };
       }
     })
-    monaco.editor.defineTheme('Pseudocode-ES', {
+    monaco.editor.defineTheme('step-code', {
       base: 'vs-dark', colors: {
-        'editor.background': colors.black,
-        'editor.lineHighlightBackground': colors.gutterGrey,
+        'editor.background': OneDarkColors.black,
+        'editor.lineHighlightBackground': OneDarkColors.gutterGrey,
       }, inherit: true,
       rules: [
-        { token: 'comment', foreground: colors.commentGrey },
-        { token: 'keyword.control', foreground: colors.magenta, fontStyle: 'bold' },
-        { token: 'internal-function', foreground: colors.cyan, fontStyle: 'italic' },
-        { token: 'keyword.type', foreground: colors.lightYellow },
-        { token: 'keyword.constant', foreground: colors.darkYellow},
-        { token: 'keyword.operator', foreground: colors.magenta },
-        { token: 'number', foreground: colors.darkYellow },
-        { token: 'string', foreground: colors.green },
-        { token: 'operator', foreground: '#000000' },
-        { token: 'delimiter', foreground: '#000000' },
-        { token: 'identifier', foreground: '#000000' },
-        { token: 'type', foreground: '#000000' },
-        { token: 'function', foreground: '#000000' },
-        { token: 'variable', foreground: '#000000' },
+        { token: 'comment', foreground: OneDarkColors.commentGrey },
+        { token: 'keyword.control', foreground: OneDarkColors.magenta, fontStyle: 'bold' },
+        { token: 'internal-function', foreground: OneDarkColors.cyan, fontStyle: 'italic' },
+        { token: 'keyword.type', foreground: OneDarkColors.lightYellow },
+        { token: 'keyword.constant', foreground: OneDarkColors.darkYellow},
+        { token: 'keyword.operator', foreground: OneDarkColors.magenta },
+        { token: 'number', foreground: OneDarkColors.darkYellow },
+        { token: 'string', foreground: OneDarkColors.green },
       ]
     })
-    monaco.editor.setTheme('Pseudocode-ES');
+    monaco.editor.defineTheme('step-code-light', {
+      base: 'vs', colors: {
+        'editor.background': AtomOneLightColors.white,
+        'editor.lineHighlightBackground': AtomOneLightColors.gutterGrey,
+      }, inherit: true,
+      rules: [
+        { token: 'comment', foreground: AtomOneLightColors.commentGrey },
+        { token: 'keyword.control', foreground: AtomOneLightColors.magenta, fontStyle: 'bold' },
+        { token: 'internal-function', foreground: AtomOneLightColors.cyan, fontStyle: 'italic' },
+        { token: 'keyword.type', foreground: AtomOneLightColors.lightYellow },
+        { token: 'keyword.constant', foreground: AtomOneLightColors.darkYellow},
+        { token: 'keyword.operator', foreground: AtomOneLightColors.magenta },
+        { token: 'number', foreground: AtomOneLightColors.darkYellow },
+        { token: 'string', foreground: AtomOneLightColors.green },
+      ]
+    })
+    monaco.editor.setTheme('step-code');
 
   }, [monaco]);
   return (

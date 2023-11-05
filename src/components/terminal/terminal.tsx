@@ -85,7 +85,9 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                           <TerminalButtons onClick={close} hint={'Stop'} color={'bg-red-500'}/>
                           <TerminalButtons onClick={minimize} hint={'Minimize'} color={'bg-yellow-500'}/>
                           <TerminalButtons onClick={toggleMaximize} hint={maximized ? `Restore` : `Maximize`} color={'bg-green-500'}/>
-                          <div className={`w-full h-3 rounded-full ${attributes['aria-pressed'] ? 'cursor-grabbing' : 'cursor-grab'}` } {...listeners} {...attributes}></div>
+                          <div className={`w-full h-3 rounded-full ${attributes['aria-pressed'] ? 'cursor-grabbing' : 'cursor-grab'}` } {...listeners} {...attributes} style={{
+                            touchAction: 'none',
+                          }}></div>
                         </div>
                         <div className={'overflow-y-auto terminal-scrollbar'} ref={terminalContentRef} onClick={() => {
                           terminalContentRef.current?.focus()
