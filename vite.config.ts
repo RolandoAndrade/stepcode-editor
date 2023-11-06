@@ -5,4 +5,12 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   base: '/stepcode-editor/',
   plugins: [react()],
+  worker: {
+    format: 'es',
+  },
+  optimizeDeps: {
+    include: [
+      './src/stepcode.worker',
+    ]
+  }
 })

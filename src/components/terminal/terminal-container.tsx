@@ -25,7 +25,6 @@ export function TerminalContainer() {
   }
 
   const maxSize = useMemo(() => {
-    console.log('windowSize', windowSize)
     return {
       width: Math.min(windowSize.width || 0, 500),
       height: Math.min(windowSize.height || 0, 200),
@@ -33,7 +32,6 @@ export function TerminalContainer() {
   }, [windowSize.width, windowSize.height])
 
   useEffect(() => {
-    console.log('maxSize', maxSize)
     if (!maximized) {
       normalize()
     }

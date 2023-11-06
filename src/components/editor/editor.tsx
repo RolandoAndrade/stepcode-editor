@@ -6,6 +6,10 @@ import { useEditor } from '../editor-context.tsx';
 import { darkTheme } from '../../core/colors/dark-theme.ts';
 import { lightTheme } from '../../core/colors/light-theme.ts';
 import { completionProvider } from '../../core/language/syntax/completion/completion-provider.ts';
+import { WorkerManager } from '../../core/language/workers/worker-manager.ts';
+import { DiagnosticsAdapter, WorkerAccessor } from '../../core/language/workers/diagnostics-adapter.ts';
+import { Uri } from 'monaco-editor';
+import { StepCodeWorker } from '../../core/language/workers/stepcode-worker.ts';
 
 export function Editor() {
   const monaco = useMonaco();
@@ -13,13 +17,22 @@ export function Editor() {
 
   useEffect(() => {
     if (!monaco) return
-    monaco.languages.register({ id: 'Pseudocode-ES' });
-    const { dispose: disposeLanguageConfig } = monaco.languages.setLanguageConfiguration('Pseudocode-ES', languageConfiguration);
-    const { dispose: disposeTokensProvider } = monaco.languages.setMonarchTokensProvider('Pseudocode-ES', languageSyntax);
-    const { dispose: disposeCompletionItemProvider } = monaco.languages.registerCompletionItemProvider('Pseudocode-ES', completionProvider)
+    monaco.languages.register({ id: 'stepcode' });
+    const { dispose: disposeLanguageConfig } = monaco.languages.setLanguageConfiguration('stepcode', languageConfiguration);
+    const { dispose: disposeTokensProvider } = monaco.languages.setMonarchTokensProvider('stepcode', languageSyntax);
+    const { dispose: disposeCompletionItemProvider } = monaco.languages.registerCompletionItemProvider('stepcode', completionProvider)
     monaco.editor.defineTheme('step-code', darkTheme)
     monaco.editor.defineTheme('step-code-light', lightTheme)
     monaco.editor.setTheme('step-code');
+
+    const client = new WorkerManager(monaco.editor);
+
+    const worker: WorkerAccessor = (...uris: Uri[]): Promise<StepCodeWorker> => {
+      return client.getLanguageServiceWorker(...uris);
+    };
+    //Call the errors provider
+    new DiagnosticsAdapter(worker, monaco.editor);
+
     return () => {
       disposeLanguageConfig();
       disposeTokensProvider();
@@ -30,7 +43,8 @@ export function Editor() {
     <div className={'relative w-full h-full'}>
       <MonacoEditor
         width={'100%'}
-        defaultLanguage="Pseudocode-ES"
+        defaultLanguage="stepcode"
+        language="stepcode"
         defaultValue={content || ''}
         options={{
           minimap: { enabled: false },
