@@ -181,6 +181,18 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Tipo de dato lógico. Se utiliza para almacenar valores de verdad.',
       range
+    },
+    {
+      label: {
+        label: 'Mientras',
+        detail: 'Estructura de control repetitiva',
+        description: 'Estructura de control repetitiva. Se ejecuta el bloque de código mientras se cumpla la condición.'
+      },
+      kind: languages.CompletionItemKind.Keyword,
+      insertText: 'Mientras ${1:Condicion} Hacer\n\t${2:// Descripción del ciclo}\n\t${3:// Alterar parámetro de salida}\nFinMientras',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Estructura de control repetitiva. Se ejecuta el bloque de código mientras se cumpla la condición.',
+      range
     }
   ]
 }
