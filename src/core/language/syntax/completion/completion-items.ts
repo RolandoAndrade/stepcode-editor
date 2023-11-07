@@ -193,6 +193,18 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Estructura de control repetitiva. Se ejecuta el bloque de código mientras se cumpla la condición.',
       range
+    },
+    {
+      label: {
+        label: 'Para',
+        detail: 'Estructura de control repetitiva',
+        description: 'Estructura de control repetitiva. Se ejecuta el bloque de código mientras el parámetro de salida se encuentre dentro del rango especificado.'
+      },
+      kind: languages.CompletionItemKind.Keyword,
+      insertText: 'Para ${1:Variable} ← ${2:ValorInicial} Hasta ${3:ValorFinal} Con Paso ${4:Incremento} Hacer\n\t${5:// Descripción del ciclo}\nFinPara',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Estructura de control repetitiva. Se ejecuta el bloque de código mientras el parámetro de salida se encuentre dentro del rango especificado.',
+      range
     }
   ]
 }

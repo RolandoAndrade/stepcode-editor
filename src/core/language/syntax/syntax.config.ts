@@ -146,6 +146,7 @@ export const languageSyntax: monaco.languages.IMonarchLanguage = {
   unicode: true,
   tokenizer: {
     root: [
+      ['(con paso)|(de otro modo)|(hasta que)', 'keyword.control'],
       [/[a-z_$][\w$]*/, {
       cases: {
         // Control keywords
