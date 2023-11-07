@@ -229,6 +229,30 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Función para obtener una subcadena de una cadena. Retorna una cadena.',
       range
+    },
+    {
+      label: {
+        label: 'Mayusculas',
+        detail: 'Función para convertir una cadena a mayúsculas',
+        description: 'Función para convertir una cadena a mayúsculas. Retorna una cadena.'
+      },
+      kind: languages.CompletionItemKind.Function,
+      insertText: 'Mayusculas(${1:Cadena})',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Función para convertir una cadena a mayúsculas. Retorna una cadena.',
+      range
+    },
+    {
+      label: {
+        label: 'Minusculas',
+        detail: 'Función para convertir una cadena a minúsculas',
+        description: 'Función para convertir una cadena a minúsculas. Retorna una cadena.'
+      },
+      kind: languages.CompletionItemKind.Function,
+      insertText: 'Minusculas(${1:Cadena})',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Función para convertir una cadena a minúsculas. Retorna una cadena.',
+      range
     }
   ]
 }
