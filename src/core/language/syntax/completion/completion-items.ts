@@ -205,6 +205,30 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Estructura de control repetitiva. Se ejecuta el bloque de código mientras el parámetro de salida se encuentre dentro del rango especificado.',
       range
+    },
+    {
+      label: {
+        label: 'Longitud',
+        detail: 'Función para obtener la longitud de una cadena',
+        description: 'Función para obtener la longitud de una cadena. Retorna un valor entero.'
+      },
+      kind: languages.CompletionItemKind.Function,
+      insertText: 'Longitud(${1:Cadena})',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Función para obtener la longitud de una cadena. Retorna un valor entero.',
+      range
+    },
+    {
+      label: {
+        label: 'Subcadena',
+        detail: 'Función para obtener una subcadena de una cadena',
+        description: 'Función para obtener una subcadena de una cadena. Retorna una cadena.'
+      },
+      kind: languages.CompletionItemKind.Function,
+      insertText: 'Subcadena(${1:Cadena}, ${2:Inicio}, ${3:Fin})',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Función para obtener una subcadena de una cadena. Retorna una cadena.',
+      range
     }
   ]
 }
