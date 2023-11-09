@@ -253,6 +253,18 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Función para convertir una cadena a minúsculas. Retorna una cadena.',
       range
+    },
+    {
+      label: {
+        label: 'Dimension',
+        detail: 'Define un arreglo de datos',
+        description: 'Define un arreglo de datos. Los arreglos son espacios de memoria que se utilizan para almacenar datos.'
+      },
+      kind: languages.CompletionItemKind.Keyword,
+      insertText: 'Dimension ${1:Variable}[${2:Dimensiones}];',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define un arreglo de datos. Los arreglos son espacios de memoria que se utilizan para almacenar datos.',
+      range
     }
   ]
 }

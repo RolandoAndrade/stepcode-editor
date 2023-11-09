@@ -110,7 +110,7 @@ export const sintax = {
   "scopeName": "source.algo"
 }
 
-const controlKeywords = ["definir", "como", "esperar", "hasta que", "repita", "retorne", "para", "escribir", "leer", "borrar"];
+const controlKeywords = ["definir", "dimension", "como", "esperar", "hasta que", "repita", "retorne", "para", "escribir", "leer", "borrar"];
 const processKeywords = ["proceso", "finproceso", "algoritmo", "inicio", "fin", "finalgoritmo"];
 const internalFunctions = ["raiz", "rc", "abs", "ln", "exp", "sen", "cos", "tan", "asen", "acos", "atan", "trunc", "redon", "azar", "aleatorio", "longitud", "subcadena", "mayusculas", "minusculas", "concatenar", "convertiranumero", "convertiratexto"];
 const typesKeywords = ["void", "real", "entero", "caracter", "literal", "lógico", "logico", "cadena"];
