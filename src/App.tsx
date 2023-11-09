@@ -25,7 +25,7 @@ function App() {
 
 
   return (
-    <div className={'w-full h-full flex flex-1 flex-col bg-oneDarkBlackDarker'}>
+    <div className={'w-full h-full flex flex-1 flex-col'}>
       <Toolbar />
       <Editor/>
       <TerminalContainer />

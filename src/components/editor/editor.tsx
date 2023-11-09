@@ -10,10 +10,12 @@ import { WorkerManager } from '../../core/language/workers/worker-manager.ts';
 import { DiagnosticsAdapter, WorkerAccessor } from '../../core/language/workers/diagnostics-adapter.ts';
 import { Uri } from 'monaco-editor';
 import { StepCodeWorker } from '../../core/language/workers/stepcode-worker.ts';
+import { useTheme } from '../theme-context.tsx';
 
 export function Editor() {
   const monaco = useMonaco();
   const { content, setContent } = useEditor();
+  const { theme } = useTheme();
 
   useEffect(() => {
     if (!monaco) return
@@ -39,6 +41,12 @@ export function Editor() {
       disposeCompletionItemProvider();
     }
   }, [monaco]);
+
+  useEffect(() => {
+    if (!monaco) return
+    monaco.editor.setTheme(theme === 'dark' ? 'step-code' : 'step-code-light');
+  }, [theme]);
+
   return (
     <div className={'relative w-full h-full'}>
       <MonacoEditor
