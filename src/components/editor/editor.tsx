@@ -25,7 +25,7 @@ export function Editor() {
     const { dispose: disposeCompletionItemProvider } = monaco.languages.registerCompletionItemProvider('stepcode', completionProvider)
     monaco.editor.defineTheme('step-code', darkTheme)
     monaco.editor.defineTheme('step-code-light', lightTheme)
-    monaco.editor.setTheme('step-code');
+    monaco.editor.setTheme(theme === 'dark' ? 'step-code' : 'step-code-light');
 
     const client = new WorkerManager(monaco.editor);
 
