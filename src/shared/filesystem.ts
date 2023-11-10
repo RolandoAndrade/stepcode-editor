@@ -33,3 +33,7 @@ export async function updateFile(fileHandle: FileSystemFileHandle, contents: str
   await writable.write(contents);
   await writable.close();
 }
+
+export function isFilesystemSupported() {
+  return 'showOpenFilePicker' in window;
+}

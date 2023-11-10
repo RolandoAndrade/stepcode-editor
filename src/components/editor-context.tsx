@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useLocalStorage } from "@uidotdev/usehooks";
 import { getFileHandle, readFile, updateFile, writeFile } from '../shared/filesystem.ts';
 
@@ -8,8 +8,8 @@ type EditorContext = {
   setFileName: (fileName: string) => void;
   setContent: (content: string) => void;
   openFile: () => Promise<void>;
-  saveNewFile: () => Promise<void>;
   saveFile: () => Promise<void>;
+  saved?: boolean;
 }
 
 const EditorContext = createContext<EditorContext>({
@@ -18,14 +18,16 @@ const EditorContext = createContext<EditorContext>({
   setFileName: () => {},
   setContent: () => {},
   openFile: async () => {},
-  saveNewFile: async () => {},
   saveFile: async () => {},
+  saved: false,
 });
 
 export function EditorContextProvider({children}: {children: React.ReactNode}) {
   const [content, saveContent] = useLocalStorage('content', '');
 
-  const [fileName, setFileName] = useState<string>('untitled.stepcode');
+  const [fileName, setFileName] = useLocalStorage('title', 'pseudocódigo.stepcode');
+
+  const [saved, setSaved] = useState<boolean>(true);
 
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle | null>(null);
 
@@ -41,6 +43,7 @@ export function EditorContextProvider({children}: {children: React.ReactNode}) {
     setFileHandle(fileHandle);
     const content = await readFile(fileHandle);
     saveContent(content);
+    setFileName(fileHandle.name)
   }
 
   async function saveNewFile() {
@@ -49,17 +52,33 @@ export function EditorContextProvider({children}: {children: React.ReactNode}) {
       return;
     }
     setFileHandle(fileHandle);
+    setFileName(fileHandle.name)
+    setSaved(true)
   }
 
   async function saveFile() {
+    if (saved) return;
     if (!fileHandle) {
+      saveNewFile();
       return;
     }
     await updateFile(fileHandle, content);
+    setFileName(fileHandle.name)
+    setSaved(true)
+  }
+
+  useEffect(() => {
+    setSaved(false)
+  }, [content]);
+
+  function updateFileName(name: string) {
+    setFileName(name)
+    setSaved(false)
+    setFileHandle(null)
   }
 
   return (
-    <EditorContext.Provider value={{content, setContent, fileName, setFileName, saveFile, saveNewFile, openFile}}>
+    <EditorContext.Provider value={{content, setContent, fileName, setFileName: updateFileName, saveFile, openFile, saved}}>
       {children}
     </EditorContext.Provider>
   );

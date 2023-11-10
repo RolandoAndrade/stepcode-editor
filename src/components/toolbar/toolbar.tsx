@@ -7,13 +7,18 @@ import { ThemeChanger } from './theme-changer.tsx';
 import { MdFolderOpen, MdOutlineSave } from 'react-icons/md';
 import { useEffect, useRef, useState } from 'react';
 import { useEditor } from '../editor-context.tsx';
+import { FilenameInput } from './filename-input.tsx';
+import { isFilesystemSupported } from '../../shared/filesystem.ts';
 
 export function Toolbar() {
   const {isRunning, play, stop, showTerminal} = useExecutionContext()
-  const {saveNewFile, openFile} = useEditor()
+  const {saveFile, openFile} = useEditor()
 
   const [showMenu, setShowMenu] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
+
+
+  const isFilesystemAPISupported = isFilesystemSupported();
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -39,10 +44,12 @@ export function Toolbar() {
 
   function openExistingFile() {
     openFile()
+    setShowMenu(false)
   }
 
-  function saveFile() {
-    saveNewFile()
+  function saveCurrentFile() {
+    saveFile()
+    setShowMenu(false)
   }
 
   return (
@@ -50,10 +57,11 @@ export function Toolbar() {
       <div className="flex flex-row justify-start items-center" onBlur={hideMenuElements} ref={ref}>
         <div className="flex flex-row justify-start items-center h-full gap-2">
           {!showMenu && <ToolbarButton icon={HiOutlineMenu} onClick={showMenuElements} hint={'Menú'}/>}
-          {showMenu && <ToolbarButton icon={MdOutlineSave} onClick={saveFile} hint={'Guardar'}/>}
-          {showMenu && <ToolbarButton icon={HiPlus} onClick={()=>{}} hint={'Nuevo'}/>}
-          {showMenu && <ToolbarButton icon={MdFolderOpen} onClick={openExistingFile} hint={'Abrir'}/>}
+          {isFilesystemAPISupported && showMenu && <ToolbarButton icon={MdOutlineSave} onClick={saveCurrentFile} hint={'Guardar'}/>}
+          {isFilesystemAPISupported && showMenu && <ToolbarButton icon={HiPlus} onClick={()=>{}} hint={'Nuevo'}/>}
+          {isFilesystemAPISupported && showMenu && <ToolbarButton icon={MdFolderOpen} onClick={openExistingFile} hint={'Abrir'}/>}
           {showMenu && <ThemeChanger/>}
+          {!showMenu && <FilenameInput/>}
         </div>
       </div>
       <div className="flex flex-row justify-end items-center">

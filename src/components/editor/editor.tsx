@@ -11,6 +11,7 @@ import { DiagnosticsAdapter, WorkerAccessor } from '../../core/language/workers/
 import { Uri } from 'monaco-editor';
 import { StepCodeWorker } from '../../core/language/workers/stepcode-worker.ts';
 import { useTheme } from '../theme-context.tsx';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 export function Editor() {
   const monaco = useMonaco();
@@ -53,6 +54,10 @@ export function Editor() {
     monaco.editor.getModels()[0].setValue(content || '');
   }, [content]);
 
+  const windowSize = useWindowSize();
+
+  const isMobile = (windowSize.width || 0) < 768;
+
   return (
     <div className={'relative w-full h-full'}>
       <MonacoEditor
@@ -67,6 +72,8 @@ export function Editor() {
           automaticLayout: true,
           cursorBlinking: 'phase',
           renderLineHighlight: 'all',
+          contextmenu: !isMobile,
+          lineNumbers: isMobile ? 'off' : 'on'
         }}
         onChange={(value) => {
           const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
