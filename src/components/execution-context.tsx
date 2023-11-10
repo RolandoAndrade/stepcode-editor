@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { TerminalInput } from './terminal/io/terminal-input.tsx';
-
-import { EventBus, interpret } from 'stepcode';
 import { useEditor } from './editor-context.tsx';
+import { createInterpreterWorker } from '../core/language/workers/interpreter-worker.ts';
 
 type TerminalInput = {
   id: string,
@@ -38,10 +37,41 @@ const ExecutionContextContext = createContext<ExecutionContext>({
   terminalContent: [],
 })
 
+type OutputMessage = {
+  type: 'output',
+  content: string,
+}
+
+type InputMessage = {
+  type: 'input',
+}
+
+
+
+type FinishMessage = {
+  type: 'finish',
+}
+
+type ErrorMessage = {
+  type: 'error',
+  message: string,
+}
+
+type Message = OutputMessage | InputMessage | ErrorMessage | FinishMessage
+
+type InputResponse = {
+  type: 'input-response',
+  input: string,
+}
+
+type RunRequest = {
+  type: 'run',
+  code: string,
+}
 
 export function ExecutionContextProvider({children}: {children: React.ReactNode}) {
   const {content} = useEditor()
-  const eventBus = new EventBus();
+
 
   const [isRunning, setIsRunning] = useState<boolean>(false)
 
@@ -49,37 +79,60 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
 
   const [terminalContent, setTerminalContent] = useState<TerminalIO[]>([])
 
-  eventBus.on('output-request', (output: string) => {
-    setTerminalContent(prev => [
-      ...prev,
-      {type: 'output', content: output, id: crypto.randomUUID()},
-    ])
-  })
+  const [worker, setWorker] = useState<Worker | null>(null)
 
-  eventBus.on('input-request', (resolve: (input: string) => void) => {
-    setTerminalContent(prev => [
-      ...prev,
-      {type: 'input', onSend: resolve, id: crypto.randomUUID()},
-    ])
-  })
+  function setupWorker(_worker: Worker) {
+    if (worker) worker.terminate()
+    _worker.onmessage = (event: MessageEvent<Message>) => {
+      if (event.data.type === 'input') {
+        setTerminalContent(prev => [
+          ...prev,
+          {type: 'input', onSend: (input: string) => {
+              _worker.postMessage({
+                type: 'input-response',
+                input
+              } as InputResponse)
+            }, id: crypto.randomUUID()},
+        ])
+      }
+      else if (event.data.type === 'finish') {
+        setTerminalContent(prev => [
+          ...prev,
+          {type: 'output', content: '\nLa ejecución ha finalizado...', id: crypto.randomUUID()},
+        ])
+      }
+      else if (event.data.type === 'error') {
+        setTerminalContent(prev => [
+          ...prev,
+          {type: 'output', content: (event.data as ErrorMessage).message, id: crypto.randomUUID()},
+        ])
+      }
+      else if (event.data.type === 'output') {
+        setTerminalContent(prev => [
+            ...prev,
+            {type: 'output', content: (event.data as OutputMessage).content, id: crypto.randomUUID()} as TerminalOutput,
+          ].slice(-50))
+      }
+    }
+    setWorker(_worker)
+  }
 
 
   function play() {
     setIsRunning(true)
     setTerminalContent([])
-    interpret({
-      code: content,
-      eventBus
-    }).then(() => {
-      setTerminalContent(prev => [
-        ...prev,
-        {type: 'output', content: '\nLa ejecución ha finalizado...', id: crypto.randomUUID()},
-      ])
-    })
+    const worker = createInterpreterWorker()
+    setupWorker(worker)
+    worker.postMessage({
+      type: 'run',
+      code: content
+    } as RunRequest)
   }
 
   function stop() {
     setIsRunning(false)
+    worker?.terminate()
+    setWorker(null)
   }
 
   function showTerminal() {

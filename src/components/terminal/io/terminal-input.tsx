@@ -17,6 +17,7 @@ export function TerminalInput({onSend}: Props) {
       <input
         autoFocus={!disabled}
         disabled={disabled}
+        autoComplete={'off'}
         type="text"
         name={'terminal-input'}
         className="bg-transparent ml-1 focus:outline-none"

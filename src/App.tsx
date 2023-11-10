@@ -21,9 +21,6 @@ self.MonacoEnvironment = {
 }
 
 function App() {
-
-
-
   return (
     <div className={'w-full h-full flex flex-1 flex-col'}>
       <Toolbar />
