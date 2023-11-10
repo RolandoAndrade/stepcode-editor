@@ -6,9 +6,11 @@ import { ToolbarButton } from './buttons/toolbar-button.tsx';
 import { ThemeChanger } from './theme-changer.tsx';
 import { MdFolderOpen, MdOutlineSave } from 'react-icons/md';
 import { useEffect, useRef, useState } from 'react';
+import { useEditor } from '../editor-context.tsx';
 
 export function Toolbar() {
   const {isRunning, play, stop, showTerminal} = useExecutionContext()
+  const {saveNewFile, openFile} = useEditor()
 
   const [showMenu, setShowMenu] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -35,14 +37,22 @@ export function Toolbar() {
     setShowMenu(false)
   }
 
+  function openExistingFile() {
+    openFile()
+  }
+
+  function saveFile() {
+    saveNewFile()
+  }
+
   return (
     <div className="flex flex-row justify-between items-center p-1 text-xl px-3 bg-white dark:bg-oneDarkBlack">
       <div className="flex flex-row justify-start items-center" onBlur={hideMenuElements} ref={ref}>
         <div className="flex flex-row justify-start items-center h-full gap-2">
           {!showMenu && <ToolbarButton icon={HiOutlineMenu} onClick={showMenuElements} hint={'Menú'}/>}
-          {showMenu && <ToolbarButton icon={MdOutlineSave} onClick={()=>{}} hint={'Guardar'}/>}
+          {showMenu && <ToolbarButton icon={MdOutlineSave} onClick={saveFile} hint={'Guardar'}/>}
           {showMenu && <ToolbarButton icon={HiPlus} onClick={()=>{}} hint={'Nuevo'}/>}
-          {showMenu && <ToolbarButton icon={MdFolderOpen} onClick={()=>{}} hint={'Abrir'}/>}
+          {showMenu && <ToolbarButton icon={MdFolderOpen} onClick={openExistingFile} hint={'Abrir'}/>}
           {showMenu && <ThemeChanger/>}
         </div>
       </div>

@@ -77,6 +77,7 @@ export function ThemeChanger() {
         height : '100%',
         zIndex: 1000,
         display: 'none',
+        pointerEvents: 'none',
       }}></canvas>
       {theme == 'light' ? <ToolbarButton icon={MdDarkMode} onClick={toggleTheme} hint={'Modo oscuro'}/>:
         <ToolbarButton icon={MdLightMode} onClick={toggleTheme} hint={'Modo claro'}/>}

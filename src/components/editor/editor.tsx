@@ -47,6 +47,12 @@ export function Editor() {
     monaco.editor.setTheme(theme === 'dark' ? 'step-code' : 'step-code-light');
   }, [theme]);
 
+  useEffect(() => {
+    if (!monaco) return
+    if (monaco.editor.getModels()[0].getValue() === content) return
+    monaco.editor.getModels()[0].setValue(content || '');
+  }, [content]);
+
   return (
     <div className={'relative w-full h-full'}>
       <MonacoEditor
