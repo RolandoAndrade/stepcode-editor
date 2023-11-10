@@ -38,7 +38,11 @@ export function ThemeChanger() {
     canvasWrapper.height = clientHeight;
     const ctx = canvasWrapper.getContext("2d")!;
     ctx.drawImage(canvas, 0, 0)
-    ctx.globalCompositeOperation = "destination-out";
+    if (theme === 'light') {
+      ctx.globalCompositeOperation = "destination-out";
+    } else {
+      ctx.globalCompositeOperation = "destination-in";
+    }
     ctx.fillStyle = "white";
     const finalRadius = Math.sqrt(
       Math.max(clientWidth * clientWidth,
@@ -47,7 +51,12 @@ export function ThemeChanger() {
     const render = () => {
       const diff = Date.now() - startDate;
       const progress = diff / duration;
-      const radius = finalRadius * progress;
+      let radius = 0;
+      if (theme === 'dark') {
+        radius = finalRadius * (1 - progress);
+      } else {
+        radius = finalRadius * progress;
+      }
       ctx.beginPath();
       ctx.arc(pageX, pageY, radius, 0, 2 * Math.PI);
       ctx.fill();

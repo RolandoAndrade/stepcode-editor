@@ -61,6 +61,10 @@ type ErrorMessage = {
   type: 'error',
   error: {
     message: string,
+    startLine: number,
+    startColumn: number,
+    endLine: number,
+    endColumn: number,
   },
 }
 
