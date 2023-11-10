@@ -19,7 +19,7 @@ type Props = {
   close: () => void,
 }
 export function Terminal({coordinates, maximize, normalize, maximized, terminalDimensions, minimize, close}: Props) {
-  const {terminalContent} = useExecutionContext()
+  const {terminalContent, showingTerminal} = useExecutionContext()
   function toggleMaximize() {
     if (maximized) {
       normalize()
@@ -41,7 +41,7 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
   }, [terminalContent.length])
 
   return (
-      <Transition show={true} appear as={Fragment}>
+      <Transition show={showingTerminal} appear as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={minimize}>
           <Transition.Child
             as={Fragment}
@@ -81,7 +81,7 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                       width: terminalDimensions.width,
                       height: terminalDimensions.height,
                     }}>
-                      <div className="bg-oneDarkBlack text-white p-4 font-mono rounded-lg w-full h-full transition-all duration-300 flex flex-col gap-2">
+                      <div className="bg-white dark:bg-oneDarkBlack text-white p-4 font-mono rounded-lg w-full h-full transition-all duration-300 flex flex-col gap-2">
                         <div className="flex items-center gap-2">
                           <TerminalButtons onClick={close} hint={'Stop'} color={'bg-red-500'}/>
                           <TerminalButtons onClick={minimize} hint={'Minimize'} color={'bg-yellow-500'}/>
@@ -90,13 +90,13 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                             touchAction: 'none',
                           }}></div>
                         </div>
-                        <div className={'overflow-y-auto terminal-scrollbar'} ref={terminalContentRef} onClick={() => {
+                        <div className={'overflow-y-auto terminal-scrollbar opacity-90'} ref={terminalContentRef} onClick={() => {
                           terminalContentRef.current?.focus()
                         }}>
                           {
                             terminalContent.map((content) => {
                               if (content.type === 'input') {
-                                return <TerminalInput key={`${content.id}`} onSend={content.onSend}/>
+                                return <TerminalInput key={`${content.id}`} onSend={content.onSend} content={content.content}/>
                               } else if (content.type === 'error') {
                                 return <TerminalError key={`${content.id}`}>{content.content}</TerminalError>
                               }

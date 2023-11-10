@@ -53,7 +53,7 @@ export function ThemeChanger() {
       const progress = diff / duration;
       let radius = 0;
       if (theme === 'dark') {
-        radius = finalRadius * (1 - progress);
+        radius = Math.max(finalRadius * (1 - progress), 0);
       } else {
         radius = finalRadius * progress;
       }

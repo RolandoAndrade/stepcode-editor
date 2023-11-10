@@ -6,6 +6,7 @@ type TerminalInput = {
   id: string,
   type: 'input',
   onSend: (input: string) => void,
+  content?: string,
 }
 
 type TerminalOutput = {
@@ -96,14 +97,16 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
     if (worker) worker.terminate()
     _worker.onmessage = (event: MessageEvent<Message>) => {
       if (event.data.type === 'input') {
+        const o = {type: 'input', onSend(input: string){
+            _worker.postMessage({
+              type: 'input-response',
+              input
+            } as InputResponse)
+            o.content = input
+          }, id: crypto.randomUUID()} as TerminalInput
         setTerminalContent(prev => [
           ...prev,
-          {type: 'input', onSend: (input: string) => {
-              _worker.postMessage({
-                type: 'input-response',
-                input
-              } as InputResponse)
-            }, id: crypto.randomUUID()},
+          o
         ])
       }
       else if (event.data.type === 'finish') {

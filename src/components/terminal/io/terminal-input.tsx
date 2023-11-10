@@ -2,9 +2,11 @@ import { useState } from 'react';
 
 type Props = {
   onSend: (input: string) => void,
+  content?: string,
 }
-export function TerminalInput({onSend}: Props) {
+export function TerminalInput({onSend, content}: Props) {
   const [disabled, setDisabled] = useState<boolean>(false)
+  const [input, setInput] = useState<string>(content || '')
   function send(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const input = e.currentTarget['terminal-input'].value
@@ -16,11 +18,13 @@ export function TerminalInput({onSend}: Props) {
       <span className="text-green-500 mr-1">{`>>`}</span>
       <input
         autoFocus={!disabled}
-        disabled={disabled}
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        disabled={!!content}
         autoComplete={'off'}
         type="text"
         name={'terminal-input'}
-        className="bg-transparent ml-1 focus:outline-none"
+        className="bg-transparent ml-1 focus:outline-none text-black dark:text-gray-300"
       />
     </form>
   )

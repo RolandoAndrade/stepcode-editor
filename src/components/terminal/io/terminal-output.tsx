@@ -8,7 +8,7 @@ export function TerminalOutput({children}: Props) {
     <pre style={{
       whiteSpace: 'pre-wrap',
     }}>
-      <div className="text-gray-300">
+      <div className="text-black dark:text-gray-300">
         {children}
       </div>
     </pre>

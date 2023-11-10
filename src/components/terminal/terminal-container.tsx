@@ -5,7 +5,7 @@ import { useWindowSize } from '@uidotdev/usehooks';
 import { useExecutionContext } from '../execution-context.tsx';
 
 export function TerminalContainer() {
-  const {stop, showingTerminal, hideTerminal} = useExecutionContext()
+  const {stop, hideTerminal} = useExecutionContext()
 
   const [maximized, setMaximized] = useState(false)
   const [terminalDimensions, setTerminalDimensions] = useState({width: 500, height: 200})
@@ -63,8 +63,8 @@ export function TerminalContainer() {
 
   return (
     <DndContext onDragEnd={dragEnd}>
-      {showingTerminal && <Terminal coordinates={coordinates} terminalDimensions={terminalDimensions} maximized={maximized} maximize={maximize}
-      normalize={normalize} minimize={hideTerminal} close={close}></Terminal>}
+      <Terminal coordinates={coordinates} terminalDimensions={terminalDimensions} maximized={maximized} maximize={maximize}
+      normalize={normalize} minimize={hideTerminal} close={close}></Terminal>
     </DndContext>
   )
 }
