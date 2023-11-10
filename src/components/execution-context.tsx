@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { TerminalInput } from './terminal/io/terminal-input.tsx';
 import { useEditor } from './editor-context.tsx';
 import { createInterpreterWorker } from '../core/language/workers/interpreter-worker.ts';
 
@@ -15,7 +14,13 @@ type TerminalOutput = {
   content: string,
 }
 
-type TerminalIO = TerminalInput | TerminalOutput
+type TerminalError = {
+  id: string,
+  type: 'error',
+  content: string,
+}
+
+type TerminalIO = TerminalInput | TerminalOutput | TerminalError
 
 type ExecutionContext = {
   isRunning: boolean;
@@ -54,7 +59,9 @@ type FinishMessage = {
 
 type ErrorMessage = {
   type: 'error',
-  message: string,
+  error: {
+    message: string,
+  },
 }
 
 type Message = OutputMessage | InputMessage | ErrorMessage | FinishMessage
@@ -104,7 +111,7 @@ export function ExecutionContextProvider({children}: {children: React.ReactNode}
       else if (event.data.type === 'error') {
         setTerminalContent(prev => [
           ...prev,
-          {type: 'output', content: (event.data as ErrorMessage).message, id: crypto.randomUUID()},
+          {type: 'error', content: (event.data as ErrorMessage).error.message, id: crypto.randomUUID()},
         ])
       }
       else if (event.data.type === 'output') {

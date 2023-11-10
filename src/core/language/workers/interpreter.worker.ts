@@ -30,6 +30,8 @@ self.onmessage = (e: MessageEvent<Message>) => {
       eventBus
     }).then(() => {
       self.postMessage({ type: 'finish' });
+    }).catch((e) => {
+      self.postMessage({ type: 'error', error: e });
     })
   } else if (e.data.type === 'input-response') {
     resolveInput(e.data.input);

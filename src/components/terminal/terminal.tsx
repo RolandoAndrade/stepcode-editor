@@ -7,6 +7,7 @@ import { TerminalInput } from './io/terminal-input.tsx';
 import { TerminalOutput } from './io/terminal-output.tsx';
 import { useExecutionContext } from '../execution-context.tsx';
 import './terminal.css'
+import { TerminalError } from './io/terminal-error.tsx';
 
 type Props = {
   coordinates: {x: number, y: number},
@@ -96,6 +97,8 @@ export function Terminal({coordinates, maximize, normalize, maximized, terminalD
                             terminalContent.map((content) => {
                               if (content.type === 'input') {
                                 return <TerminalInput key={`${content.id}`} onSend={content.onSend}/>
+                              } else if (content.type === 'error') {
+                                return <TerminalError key={`${content.id}`}>{content.content}</TerminalError>
                               }
                               return <TerminalOutput key={`${content.id}`}>{content.content}</TerminalOutput>
                             })
