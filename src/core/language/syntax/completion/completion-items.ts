@@ -313,6 +313,30 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Define un parámetro por referencia. Los parámetros por referencia se utilizan para pasar valores a un subproceso.',
       range
+    },
+    {
+      label: {
+        label: 'Funcion',
+        detail: 'Define una función',
+        description: 'Define una función. Las funciones son bloques de código que retornan un valor.'
+      },
+      kind: languages.CompletionItemKind.Struct,
+      insertText: 'Funcion ${1:NombreFuncion}(${2:Parametros}): ${3:TipoRetorno}\n\t${4:// Descripcion de la funcion}\nFinFuncion',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define una función. Las funciones son bloques de código que retornan un valor.',
+      range
+    },
+    {
+      label: {
+        label: 'Funcion PSeInt',
+        detail: 'Define una función con el estilo de PSeInt',
+        description: 'Define una función. Las funciones son bloques de código que retornan un valor.'
+      },
+      kind: languages.CompletionItemKind.Struct,
+      insertText: 'Funcion ${1:VariableDeRetorno} ← ${2:NombreFuncion}(${3:Parametros})\n\t${4:// Descripcion de la funcion}\n\tDefinir ${1:VariableDeRetorno} Como ${5:TipoVariable};\nFinFuncion',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define una función. Las funciones son bloques de código que retornan un valor.',
+      range
     }
   ]
 }

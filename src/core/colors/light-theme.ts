@@ -15,6 +15,6 @@ export const lightTheme = {
     { token: 'keyword.operator', foreground: AtomOneLightColors.magenta },
     { token: 'number', foreground: AtomOneLightColors.darkYellow },
     { token: 'string', foreground: AtomOneLightColors.green },
-    { token: 'keyword.parameter', foreground: AtomOneLightColors.lightRed },
+    { token: 'keyword.parameter', foreground: AtomOneLightColors.lightRed, fontStyle: 'bold' },
   ]
 } as editor.IStandaloneThemeData;
