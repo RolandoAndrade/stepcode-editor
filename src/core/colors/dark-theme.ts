@@ -14,5 +14,6 @@ export const darkTheme = {
     { token: 'keyword.operator', foreground: OneDarkColors.magenta },
     { token: 'number', foreground: OneDarkColors.darkYellow },
     { token: 'string', foreground: OneDarkColors.green },
+    { token: 'keyword.parameter', foreground: OneDarkColors.lightRed },
   ]
 } as editor.IStandaloneThemeData;
