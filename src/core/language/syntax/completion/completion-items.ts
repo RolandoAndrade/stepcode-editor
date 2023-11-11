@@ -265,6 +265,54 @@ export function createCompletionItems(range: languages.CompletionItem['range']):
       insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
       documentation: 'Define un arreglo de datos. Los arreglos son espacios de memoria que se utilizan para almacenar datos.',
       range
+    },
+    {
+      label: {
+        label: 'SubProceso',
+        detail: 'Define un subproceso',
+        description: 'Define un subproceso. Un subproceso es un bloque de código que se puede reutilizar en el proceso principal.'
+      },
+      kind: languages.CompletionItemKind.Struct,
+      insertText: 'SubProceso ${1:NombreSubProceso}(${2:Parametros})\n\t${3:// Descripcion del subproceso}\nFinSubProceso',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define un subproceso. Un subproceso es un bloque de código que se puede reutilizar en el proceso principal.',
+      range
+    },
+    {
+      label: {
+        label: 'SubAlgoritmo',
+        detail: 'Define un subproceso',
+        description: 'Define un subproceso. Un subproceso es un bloque de código que se puede reutilizar en el proceso principal.'
+      },
+      kind: languages.CompletionItemKind.Struct,
+      insertText: 'SubAlgoritmo ${1:NombreSubProceso}(${2:Parametros})\n\t${3:// Descripcion del subproceso}\nFinSubAlgoritmo',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define un subproceso. Un subproceso es un bloque de código que se puede reutilizar en el proceso principal.',
+      range
+    },
+    {
+      label: {
+        label: 'Por Valor',
+        detail: 'Define un parámetro por valor',
+        description: 'Define un parámetro por valor. Los parámetros por valor se utilizan para pasar valores a un subproceso.'
+      },
+      kind: languages.CompletionItemKind.Keyword,
+      insertText: 'Por Valor',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define un parámetro por valor. Los parámetros por valor se utilizan para pasar valores a un subproceso.',
+      range
+    },
+    {
+      label: {
+        label: 'Por Referencia',
+        detail: 'Define un parámetro por referencia',
+        description: 'Define un parámetro por referencia. Los parámetros por referencia se utilizan para pasar valores a un subproceso.'
+      },
+      kind: languages.CompletionItemKind.Keyword,
+      insertText: 'Por Referencia',
+      insertTextRules: languages.CompletionItemInsertTextRule.InsertAsSnippet,
+      documentation: 'Define un parámetro por referencia. Los parámetros por referencia se utilizan para pasar valores a un subproceso.',
+      range
     }
   ]
 }
