@@ -132,5 +132,6 @@ export const stepCodeLanguage = StreamLanguage.define({
     }
     stream.next()
     return 'comment'
-  }
+  },
+  languageData: {}
 })

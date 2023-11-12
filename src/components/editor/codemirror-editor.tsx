@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
 import CodeMirror, { ViewUpdate } from '@uiw/react-codemirror';
 import './editor.css';
 import { useEditor } from '../editor-context.tsx';
@@ -7,35 +7,34 @@ import { stepCodeLanguage } from './codemirror/stepcode.language.ts';
 import { atomLightTheme } from './codemirror/themes/light.ts';
 import { oneDarkTheme } from './codemirror/themes/dark.ts';
 export function CodemirrorEditor() {
-
-  const editorRef = useRef<typeof CodeMirror>(null);
   const { content, setContent } = useEditor();
   const onChange = useCallback((value: string, viewUpdate: ViewUpdate) => {
-    const newValue = value?.replace('<-', `←`)?.replace('!=', '≠')?.replace('<=', '≤')?.replace('>=', '≥')?.replace('->', '→');
-    if (value !== newValue) {
-      const newPosition = viewUpdate.state.selection.main.head + 1;
-
-
-      /*setTimeout(() => {
-        viewUpdate.view.dispatch({
-          selection: {
-            anchor: newPosition,
-            head: newPosition,
-          }
-        })
-      },10)*/
+    const matches = value.matchAll(/(->|<-|!=|<=|>=)/g);
+    const changes = [];
+    for (const match of matches) {
+      console.log(match);
+      changes.push({
+        from: match.index!,
+        to: match.index! + match[0].length,
+        insert: match[0].replace('<-', `←`).replace('!=', '≠').replace('<=', '≤').replace('>=', '≥').replace('->', '→'),
+      })
     }
-    setContent(newValue);
+    if (changes.length === 0) {
+      setContent(value);
+      return;
+    }
+    viewUpdate.view.dispatch({
+      changes,
+    })
   }, []);
   const { theme } = useTheme();
-  return <CodeMirror
+  return <div className={'bg-white dark:bg-oneDarkBlack h-full max-h-full overflow-y-auto'}><CodeMirror
     id={'editor'}
-    ref={editorRef}
     value={content}
     theme={theme === 'dark' ? oneDarkTheme : atomLightTheme}
-    height="100%"
+    height={'100%'}
     extensions={[
       stepCodeLanguage
     ]}
-    onChange={onChange} />;
+    onChange={onChange} /></div>;
 }
