@@ -127,7 +127,7 @@ export const stepCodeLanguage = StreamLanguage.define({
             return 'variableName'
           }
         }
-        return tokenClasses.get(nextToken.type) || ''
+        return tokenClasses.get(nextToken.type) || 'content'
       }
     }
     stream.next()

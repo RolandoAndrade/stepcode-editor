@@ -20,7 +20,7 @@ export const atomLightTheme = createTheme({
     { tag: t.number, color: '#986801' },
     { tag: t.bool, color: '#986801' },
     { tag: t.null, color: '#986801' },
-    { tag: t.keyword, color: '#a626a4' },
+    { tag: t.keyword, color: '#a626a4', fontWeight: 'bold' },
     { tag: t.operator, color: '#383a42' },
     { tag: t.className, color: '#e45649' },
     { tag: t.definition(t.typeName), color: '#e45649' },
