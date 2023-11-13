@@ -2,5 +2,86 @@
     max-height: 100%;
     height: 100%;
     font-size: 14px;
-    font-family: Consolas, "Corier New", monospace !important;
+}
+
+* {
+    animation: none !important;
+}
+
+.cm-cursor {
+    animation: customCaretAnim 1s infinite !important;
+    width: 2px !important;
+    background-color: white;
+    height: 18px !important;
+    border-left: 5px solid white;
+}
+
+html[class='light'] {
+    .cm-cursor {
+        background-color: #505050;
+    }
+}
+
+
+@keyframes customCaretAnim {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+.cm-lineNumbers > .cm-gutterElement {
+    width: 38px !important;
+}
+
+.cm-foldGutter > .cm-gutterElement > span {
+    font-size: 0px;
+    padding-right: 20px; /* Add some padding to create space for the caret */
+}
+
+.cm-foldGutter span:not([title="Unfold line"]){
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.cm-foldGutter:hover span {
+    opacity: 1;
+}
+
+.cm-foldGutter > .cm-gutterElement > span {
+    font-size: 0px;
+    padding-right: 20px; /* Add some padding to create space for the caret */
+}
+
+.cm-foldGutter > .cm-gutterElement {
+    position: relative;
+}
+
+.cm-foldGutter > .cm-gutterElement > span[title='Fold line']::after {
+    font-size: 12px;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 5px; /* Adjust the position of the caret */
+    transform: translateY(-50%) rotate(45deg); /* Rotate the caret */
+    width: 8px;
+    height: 8px;
+    border-bottom: 1px solid white; /* Adjust the color and thickness of the caret */
+    border-right: 1px solid white; /* Adjust the color and thickness of the caret */
+}
+
+
+.cm-foldGutter > .cm-gutterElement > span[title='Unfold line']::after {
+    font-size: 12px;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 5px; /* Adjust the position of the caret */
+    transform: translateY(-50%) rotate(-45deg); /* Rotate the caret */
+    width: 8px;
+    height: 8px;
+    border-bottom: 1px solid white; /* Adjust the color and thickness of the caret */
+    border-right: 1px solid white; /* Adjust the color and thickness of the caret */
 }

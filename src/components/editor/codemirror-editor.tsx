@@ -7,7 +7,7 @@ import { stepCodeLanguage } from './codemirror/stepcode.language.ts';
 import { atomLightTheme } from './codemirror/themes/light.ts';
 import { oneDarkTheme } from './codemirror/themes/dark.ts';
 import { foldOnIndent } from './codemirror/fold-on-indent.ts';
-import { indentUnit, codeFolding } from '@codemirror/language';
+import { indentUnit } from '@codemirror/language';
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
 import { AtomOneLightColors, OneDarkColors } from '../../core/colors/colors.ts';
 
@@ -52,7 +52,7 @@ export function CodemirrorEditor() {
           activeDark: '#727272',
           activeLight: '#727272',
         }
-      })
+      }),
     ]}
     onChange={onChange} /></div>;
 }

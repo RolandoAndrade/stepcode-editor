@@ -9,12 +9,14 @@ export const oneDarkTheme = createTheme({
     caret: '#e06c75',
     selection: '#3e4451',
     selectionMatch: '#3e4451',
-    lineHighlight: '#3e4451',
+    lineHighlight: 'rgba(62,68,81,0.4)',
     gutterBackground: '#282c34',
-    gutterForeground: '#5c6370',
+    gutterForeground: '#858585',
+    gutterActiveForeground: '#c6c6c6',
+    fontFamily: `Consolas, "Courier New", monospace`
   },
   styles: [
-    { tag: t.content, color: '#fff', fontWeight: '100'},
+    { tag: t.content, color: '#fff'},
     { tag: t.comment, color: '#5c6370' },
     { tag: t.variableName, color: '#61afef' },
     { tag: [t.string, t.special(t.brace)], color: '#98c379' },
