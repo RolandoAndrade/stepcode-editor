@@ -10,6 +10,7 @@ import { foldOnIndent } from './codemirror/fold-on-indent.ts';
 import { indentUnit } from '@codemirror/language';
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
 import { AtomOneLightColors, OneDarkColors } from '../../core/colors/colors.ts';
+import { stepcodeLinter } from './codemirror/stepcode.linter.ts';
 
 export function CodemirrorEditor() {
   const { content, setContent } = useEditor();
@@ -69,6 +70,7 @@ export function CodemirrorEditor() {
       foldOnIndent(),
       stepCodeLanguage,
       indentUnit.of('    '),
+      stepcodeLinter,
       indentationMarkers({
         thickness: 1,
         colors: {
