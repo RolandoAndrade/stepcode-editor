@@ -3,6 +3,7 @@ import { toCanvas } from 'html-to-image'
 import { ToolbarButton } from './buttons/toolbar-button.tsx';
 import { useTheme } from '../theme-context.tsx';
 import { MdDarkMode, MdLightMode } from 'react-icons/md';
+import { useWindowSize } from '@uidotdev/usehooks';
 
 const duration = 500;
 
@@ -15,12 +16,14 @@ export function ThemeChanger() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const {width, height} = useWindowSize();
+
   async function takeScreenshot(): Promise<HTMLCanvasElement> {
     return toCanvas(document.getElementsByTagName('body')[0], {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      canvasWidth: window.innerWidth,
-      canvasHeight: window.innerHeight,
+      width: width || window.innerWidth,
+      height: height || window.innerHeight,
+      canvasWidth: (width || window.innerWidth),
+      canvasHeight: (height || window.innerHeight),
       pixelRatio: 1,
       skipAutoScale: true,
       skipFonts: true,
@@ -34,9 +37,10 @@ export function ThemeChanger() {
     const { pageX, pageY } = e;
     const { clientWidth, clientHeight } = document.body;
     const startDate = Date.now();
-    canvasWrapper.width = clientWidth;
-    canvasWrapper.height = clientHeight;
+    canvasWrapper.width = width || clientWidth;
+    canvasWrapper.height = height || clientHeight;
     const ctx = canvasWrapper.getContext("2d")!;
+    ctx.imageSmoothingEnabled = false;
     ctx.drawImage(canvas, 0, 0)
     if (theme === 'light') {
       ctx.globalCompositeOperation = "destination-out";
@@ -61,20 +65,18 @@ export function ThemeChanger() {
       ctx.arc(pageX, pageY, radius, 0, 2 * Math.PI);
       ctx.fill();
       if (progress < 1) requestAnimationFrame(render);
+      else canvasWrapper.style.display = 'none';
     };
-    requestAnimationFrame(render);
     setTheme(theme === 'dark' ? 'light' : 'dark');
-    setTimeout(() => {
-      canvasWrapper.style.display = 'none';
-    }, duration);
+    requestAnimationFrame(render);
   }
 
 
   return (
     <>
-      <canvas ref={canvasRef} width={'100%'} height={'100%'} className={'fixed top-0 left-0'} style={{
-        width: '100%',
-        height : '100%',
+      <canvas ref={canvasRef} width={width || '100%'} height={height || '100%'} className={'fixed top-0 left-0'} style={{
+        width: width || '100%',
+        height: height || '100%',
         zIndex: 1000,
         display: 'none',
         pointerEvents: 'none',

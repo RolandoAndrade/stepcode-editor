@@ -87,12 +87,7 @@ const tokenClasses = new Map<number, string>([
   [StepCodeLexer.NUM_REAL, 'number'],
 ])
 
-let tokensMemory: [string, { start: number, end: number, type: number, value: string }[]] = ['', {
-  start: 0,
-  end: 0,
-  type: 0,
-  value: ''
-}]
+let tokensMemory: [string, { start: number, end: number, type: number, value: string }[]] | [undefined, undefined] = [undefined, undefined]
 export const getTokens = (code: string) => {
   const [lastCode, lastTokens] = tokensMemory
   if (lastCode === code) {

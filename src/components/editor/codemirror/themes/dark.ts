@@ -12,8 +12,7 @@ export const oneDarkTheme = createTheme({
     lineHighlight: 'rgba(62,68,81,0.4)',
     gutterBackground: '#282c34',
     gutterForeground: '#858585',
-    gutterActiveForeground: '#c6c6c6',
-    fontFamily: `Consolas, "Courier New", monospace`
+    gutterActiveForeground: '#c6c6c6'
   },
   styles: [
     { tag: t.content, color: '#fff'},

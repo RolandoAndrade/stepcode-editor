@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CodeMirror, { ViewUpdate } from '@uiw/react-codemirror';
 import './editor.css';
 import { useEditor } from '../editor-context.tsx';
@@ -13,6 +13,8 @@ import { AtomOneLightColors, OneDarkColors } from '../../core/colors/colors.ts';
 
 export function CodemirrorEditor() {
   const { content, setContent } = useEditor();
+  const [fontSize, setFontSize] = useState(14);
+
   const onChange = useCallback((value: string, viewUpdate: ViewUpdate) => {
     const matches = value.matchAll(/(->|<-|!=|<=|>=)/g);
     const changes = [];
@@ -33,6 +35,26 @@ export function CodemirrorEditor() {
     })
   }, []);
   const { theme } = useTheme();
+
+  useEffect(() => {
+    const editor = document.getElementById('editor');
+    if (!editor) return;
+    editor.addEventListener('wheel', changeZoom);
+    return () => {
+      editor.removeEventListener('wheel', changeZoom);
+    }
+  }, []);
+
+  function changeZoom(e: WheelEvent) {
+    if (e.ctrlKey) {
+      e.preventDefault()
+      if (e.deltaY > 0) {
+        setFontSize(fontSize => fontSize - 1);
+      } else {
+        setFontSize(fontSize => fontSize + 1);
+      }
+    }
+  }
   return <div className={'bg-white dark:bg-oneDarkBlack h-full max-h-full overflow-y-auto'}>
     <CodeMirror
     id={'editor'}
@@ -40,6 +62,9 @@ export function CodemirrorEditor() {
     placeholder={`Empiece a escribir para descartar o no mostrar esto de nuevo.`}
     theme={theme === 'dark' ? oneDarkTheme : atomLightTheme}
     height={'100%'}
+    style={{
+      fontSize: `${fontSize}px`,
+    }}
     extensions={[
       foldOnIndent(),
       stepCodeLanguage,

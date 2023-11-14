@@ -1,7 +1,6 @@
 #editor {
     max-height: 100%;
     height: 100%;
-    font-size: 14px;
 }
 
 * {
@@ -12,7 +11,6 @@
     animation: customCaretAnim 1s infinite !important;
     width: 2px !important;
     background-color: white;
-    height: 18px !important;
     border-left: 5px solid white;
 }
 
