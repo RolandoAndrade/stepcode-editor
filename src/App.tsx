@@ -3,6 +3,7 @@ import { Toolbar } from './components/toolbar/toolbar.tsx';
 import { TerminalContainer } from './components/terminal/terminal-container.tsx';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useEditor } from './components/editor-context.tsx';
+import { CodemirrorEditorLegacy } from './components/editor/codemirror-editor.legacy.tsx';
 import { Editor } from './components/editor/editor.tsx';
 
 function App() {

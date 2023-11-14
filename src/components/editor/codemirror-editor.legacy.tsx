@@ -72,7 +72,6 @@ export function CodemirrorEditorLegacy() {
     }}
     indentWithTab={false}
     extensions={[
-      basicSetup,
       keymap.of([indentWithTab]),
       foldOnIndent(),
       stepCodeLanguage,
