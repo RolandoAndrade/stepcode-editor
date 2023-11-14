@@ -9,7 +9,7 @@ export const atomLightTheme = createTheme({
     caret: '#000000',
     selection: '#c8c8c8',
     selectionMatch: '#c8c8c8',
-    lineHighlight: '#eaeaea',
+    lineHighlight: 'rgba(234,234,234,0.4)',
     gutterBackground: '#ffffff',
     gutterForeground: '#8a8a8a',
   },

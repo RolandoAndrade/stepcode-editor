@@ -11,8 +11,12 @@ import { indentUnit } from '@codemirror/language';
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
 import { AtomOneLightColors, OneDarkColors } from '../../core/colors/colors.ts';
 import { stepcodeLinter } from './codemirror/stepcode.linter.ts';
+import { stepcodeCompletions } from './codemirror/completions/stepcode.completions.ts';
+import {basicSetup} from "codemirror"
+import {keymap} from "@codemirror/view"
+import {indentWithTab} from "@codemirror/commands"
 
-export function CodemirrorEditor() {
+export function CodemirrorEditorLegacy() {
   const { content, setContent } = useEditor();
   const [fontSize, setFontSize] = useState(14);
 
@@ -66,11 +70,16 @@ export function CodemirrorEditor() {
     style={{
       fontSize: `${fontSize}px`,
     }}
+    indentWithTab={false}
     extensions={[
+      basicSetup,
+      keymap.of([indentWithTab]),
       foldOnIndent(),
       stepCodeLanguage,
+      stepcodeCompletions,
       indentUnit.of('    '),
       stepcodeLinter,
+
       indentationMarkers({
         thickness: 1,
         colors: {

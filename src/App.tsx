@@ -3,7 +3,7 @@ import { Toolbar } from './components/toolbar/toolbar.tsx';
 import { TerminalContainer } from './components/terminal/terminal-container.tsx';
 import { useHotkeys } from 'react-hotkeys-hook';
 import { useEditor } from './components/editor-context.tsx';
-import { CodemirrorEditor } from './components/editor/codemirror-editor.tsx';
+import { Editor } from './components/editor/editor.tsx';
 
 function App() {
   const {saveFile} = useEditor()
@@ -16,7 +16,7 @@ function App() {
   return (
     <div className={'w-full h-full flex flex-1 flex-col'}>
       <Toolbar />
-      <CodemirrorEditor/>
+      <Editor/>
       <TerminalContainer />
     </div>
   )
