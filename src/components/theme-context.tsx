@@ -40,11 +40,12 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
 
   async function takeScreenshot(): Promise<HTMLCanvasElement> {
     return toCanvas(document.getElementsByTagName('body')[0], {
-      width: width || window.innerWidth,
-      height: height || window.innerHeight,
-      canvasWidth: (width || window.innerWidth),
-      canvasHeight: (height || window.innerHeight),
-      pixelRatio: 1,
+      width: (width || window.innerWidth) * devicePixelRatio,
+      height: (height || window.innerHeight) * devicePixelRatio,
+      canvasWidth: (width || window.innerWidth) * devicePixelRatio,
+      canvasHeight: (height || window.innerHeight) * devicePixelRatio,
+      pixelRatio: window.devicePixelRatio,
+      quality: 1,
       skipAutoScale: true,
       skipFonts: true,
     })
@@ -57,8 +58,8 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
     const { pageX, pageY } = e;
     const { clientWidth, clientHeight } = document.body;
     const startDate = Date.now();
-    canvasWrapper.width = width || clientWidth;
-    canvasWrapper.height = height || clientHeight;
+    canvasWrapper.width = (width || clientWidth) * devicePixelRatio;
+    canvasWrapper.height = (height || clientHeight) * devicePixelRatio;
     const ctx = canvasWrapper.getContext("2d")!;
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(canvas, 0, 0)
@@ -69,9 +70,9 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
     }
     ctx.fillStyle = "white";
     const finalRadius = Math.sqrt(
-      Math.max(clientWidth * clientWidth,
-        clientHeight * clientHeight)
-    );
+      Math.max(clientWidth ** 2,
+        clientHeight ** 2)
+    ) * 1.5;
     const render = () => {
       const diff = Date.now() - startDate;
       const progress = diff / duration;
@@ -82,7 +83,7 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
         radius = finalRadius * progress;
       }
       ctx.beginPath();
-      ctx.arc(pageX, pageY, radius, 0, 2 * Math.PI);
+      ctx.arc(pageX + 60, pageY + 10, radius, 0, 2 * Math.PI);
       ctx.fill();
       if (progress < 1) requestAnimationFrame(render);
       else canvasWrapper.style.display = 'none';
