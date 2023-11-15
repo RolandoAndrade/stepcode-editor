@@ -4,6 +4,7 @@ import { structuresCompletions } from './structures.completions.ts';
 import { conditionalsCompletions } from './conditionals.completions.ts';
 import { loopCompletions } from './loop.completions.ts';
 import { definitionCompletions } from './definition.completions.ts';
+import { functionCompletions } from './function.completions.ts';
 
 function langCompletions(context: CompletionContext): CompletionResult | null {
   const word = context.matchBefore(/\w*/)
@@ -15,7 +16,8 @@ function langCompletions(context: CompletionContext): CompletionResult | null {
       ...structuresCompletions,
       ...conditionalsCompletions,
       ...loopCompletions,
-      ...definitionCompletions
+      ...definitionCompletions,
+      ...functionCompletions
     ]
   }
 }
