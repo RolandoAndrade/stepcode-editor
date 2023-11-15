@@ -1,4 +1,4 @@
-import { CompletionContext, snippet } from '@codemirror/autocomplete'
+import { CompletionContext } from '@codemirror/autocomplete'
 import { autocompletion, CompletionResult } from "@codemirror/autocomplete";
 import { structuresCompletions } from './structures.completions.ts';
 

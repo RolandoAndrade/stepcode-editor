@@ -1,5 +1,5 @@
 import './editor.css';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useEditor } from '../editor-context.tsx';
 import { EditorState } from '@codemirror/state';
 import { EditorView } from '@codemirror/view';
@@ -19,13 +19,31 @@ import { foldOnIndent } from './codemirror/fold-on-indent.ts';
 
 
 export function Editor() {
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { content, setContent } = useEditor();
   const {theme} = useTheme()
-
+  const [fontSize, setFontSize] = useState(14);
 
   const onUpdate = EditorView.updateListener.of((v) => {
-    setContent(v.state.doc.toString())
+    const value = v.state.doc.toString();
+    const matches = value.matchAll(/(->|<-|!=|<=|>=)/g);
+    const changes = [];
+    for (const match of matches) {
+      console.log(match);
+      changes.push({
+        from: match.index!,
+        to: match.index! + match[0].length,
+        insert: match[0].replace('<-', `←`).replace('!=', '≠').replace('<=', '≤').replace('>=', '≥').replace('->', '→'),
+      })
+    }
+    if (changes.length === 0) {
+      setContent(value);
+      return;
+    }
+    v.view.dispatch({
+      changes,
+    })
+    setContent(value)
   })
 
   useEffect(() => {
@@ -60,5 +78,30 @@ export function Editor() {
     }
   }, [theme])
 
-  return <div ref={ref} className={'bg-white dark:bg-oneDarkBlack h-full max-h-full overflow-y-auto'} id={'editor'}></div>;
+
+  function changeZoom(e: WheelEvent) {
+    if (e.ctrlKey) {
+      e.preventDefault()
+      if (e.deltaY > 0) {
+        setFontSize(fontSize => fontSize - 1);
+      } else {
+        setFontSize(fontSize => fontSize + 1);
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (!ref.current) return
+    const editor = ref.current
+    if (!editor) return;
+    editor.addEventListener('wheel', changeZoom);
+    return () => {
+      editor.removeEventListener('wheel', changeZoom);
+    }
+  }, []);
+
+  return <div ref={ref} className={'bg-white dark:bg-oneDarkBlack h-full max-h-full overflow-y-auto'} id={'editor'}
+  style={{
+    fontSize: `${fontSize}px`,
+  }}></div>;
 }

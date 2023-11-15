@@ -3,12 +3,7 @@
     height: 100%;
 }
 
-* {
-    animation: none !important;
-}
-
 .cm-cursor {
-    animation: customCaretAnim 1s infinite !important;
     width: 2px !important;
     background-color: white;
     border-left: 5px solid white;
@@ -17,16 +12,6 @@
 html[class='light'] {
     .cm-cursor {
         background-color: #505050;
-    }
-}
-
-
-@keyframes customCaretAnim {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
     }
 }
 

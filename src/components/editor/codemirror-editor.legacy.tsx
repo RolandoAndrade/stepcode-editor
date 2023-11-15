@@ -12,7 +12,6 @@ import { indentationMarkers } from '@replit/codemirror-indentation-markers';
 import { AtomOneLightColors, OneDarkColors } from '../../core/colors/colors.ts';
 import { stepcodeLinter } from './codemirror/stepcode.linter.ts';
 import { stepcodeCompletions } from './codemirror/completions/stepcode.completions.ts';
-import {basicSetup} from "codemirror"
 import {keymap} from "@codemirror/view"
 import {indentWithTab} from "@codemirror/commands"
 
@@ -78,7 +77,6 @@ export function CodemirrorEditorLegacy() {
       stepcodeCompletions,
       indentUnit.of('    '),
       stepcodeLinter,
-
       indentationMarkers({
         thickness: 1,
         colors: {
