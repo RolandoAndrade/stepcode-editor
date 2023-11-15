@@ -33,7 +33,9 @@ const keywords = [
   StepCodeLexer.OF,
   StepCodeLexer.OTHERWISE,
   StepCodeLexer.THEN,
-  StepCodeLexer.HACER
+  StepCodeLexer.HACER,
+  StepCodeLexer.MIENTRASQUE,
+  StepCodeLexer.WITHSTEP
 ] as const
 
 const operators = [

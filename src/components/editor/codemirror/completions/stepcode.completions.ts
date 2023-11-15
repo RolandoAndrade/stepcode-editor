@@ -2,6 +2,7 @@ import { CompletionContext } from '@codemirror/autocomplete'
 import { autocompletion, CompletionResult } from "@codemirror/autocomplete";
 import { structuresCompletions } from './structures.completions.ts';
 import { conditionalsCompletions } from './conditionals.completions.ts';
+import { loopCompletions } from './loop.completions.ts';
 
 function langCompletions(context: CompletionContext): CompletionResult | null {
   const word = context.matchBefore(/\w*/)
@@ -11,7 +12,8 @@ function langCompletions(context: CompletionContext): CompletionResult | null {
     from: word?.from || context.pos,
     options: [
       ...structuresCompletions,
-      ...conditionalsCompletions
+      ...conditionalsCompletions,
+      ...loopCompletions
     ]
   }
 }
