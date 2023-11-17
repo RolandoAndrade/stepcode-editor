@@ -52,7 +52,10 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
   }
 
   async function handleChange(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    const editor = document.getElementById('editor')!;
+    editor.style.overflow = 'hidden';
     const canvas = await takeScreenshot();
+    editor.style.overflow = 'auto';
     const canvasWrapper = canvasRef.current!;
     canvasWrapper.style.display = 'block';
     const { pageX, pageY } = e;

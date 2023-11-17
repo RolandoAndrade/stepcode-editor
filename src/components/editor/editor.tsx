@@ -2,7 +2,7 @@ import './editor.css';
 import { useEffect, useRef, useState } from 'react';
 import { useEditor } from '../editor-context.tsx';
 import { EditorState } from '@codemirror/state';
-import { EditorView } from '@codemirror/view';
+import { EditorView, placeholder } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { keymap } from '@codemirror/view';
 import { defaultKeymap, indentWithTab } from '@codemirror/commands'
@@ -16,6 +16,7 @@ import { oneDarkTheme } from './codemirror/themes/dark.ts';
 import { useTheme } from '../theme-context.tsx';
 import { atomLightTheme } from './codemirror/themes/light.ts';
 import { foldOnIndent } from './codemirror/fold-on-indent.ts';
+
 
 
 export function Editor() {
@@ -69,6 +70,7 @@ export function Editor() {
             activeLight: '#727272',
           }
         }),
+        placeholder('Empiece a escribir para descartar o no mostrar esto de nuevo...')
       ],
     })
     const view = new EditorView({ state, parent: ref.current! })

@@ -13,12 +13,12 @@ export const structuresCompletions: Completion[] = [
     type: "method",
     detail: "Define un proceso o algoritmo",
   }),
-  snippetCompletion("SubProceso ${NombreSubProceso}({${Parametros}})\n\t${// Descripcion del subproceso}\nFinSubProceso",     {
+  snippetCompletion("SubProceso ${NombreSubProceso}(${Parametros})\n\t${// Descripcion del subproceso}\nFinSubProceso",     {
     label: "SubProceso",
     type: "method",
     detail: "Define un subproceso o subalgoritmo",
   }),
-  snippetCompletion("SubAlgoritmo ${NombreSubAlgoritmo}({${Parametros}})\n\t${// Descripcion del subalgoritmo}\nFinSubAlgoritmo",     {
+  snippetCompletion("SubAlgoritmo ${NombreSubAlgoritmo}(${Parametros})\n\t${// Descripcion del subalgoritmo}\nFinSubAlgoritmo",     {
     label: "SubAlgoritmo",
     type: "method",
     detail: "Define un subproceso o subalgoritmo",
