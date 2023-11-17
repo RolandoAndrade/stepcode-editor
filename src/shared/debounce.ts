@@ -8,7 +8,7 @@ export function debounce<T extends (...args: any[]) => any>(
   delay: number,
   maxReps: number
 ): DebouncedFunction<T> {
-  let timeoutId: number | null;
+  let timeoutId: NodeJS.Timeout | null;
   let counter = 0;
 
   const debouncedFunction: DebouncedFunction<T> = function (
