@@ -10,6 +10,7 @@ type EditorContext = {
   openFile: () => Promise<void>;
   saveFile: () => Promise<void>;
   saved?: boolean;
+  externalChange?: boolean;
 }
 
 const EditorContext = createContext<EditorContext>({
@@ -20,6 +21,7 @@ const EditorContext = createContext<EditorContext>({
   openFile: async () => {},
   saveFile: async () => {},
   saved: false,
+  externalChange: false,
 });
 
 export function EditorContextProvider({children}: {children: React.ReactNode}) {
@@ -30,6 +32,8 @@ export function EditorContextProvider({children}: {children: React.ReactNode}) {
   const [saved, setSaved] = useState<boolean>(true);
 
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle | null>(null);
+
+  const [externalChange, setExternalChange] = useState<boolean>(false);
 
   function setContent(content: string) {
     saveContent(content);
@@ -44,6 +48,7 @@ export function EditorContextProvider({children}: {children: React.ReactNode}) {
     const content = await readFile(fileHandle);
     saveContent(content);
     setFileName(fileHandle.name)
+    setExternalChange(p => !p)
   }
 
   async function saveNewFile() {
@@ -78,7 +83,7 @@ export function EditorContextProvider({children}: {children: React.ReactNode}) {
   }
 
   return (
-    <EditorContext.Provider value={{content, setContent, fileName, setFileName: updateFileName, saveFile, openFile, saved}}>
+    <EditorContext.Provider value={{content, setContent, fileName, setFileName: updateFileName, saveFile, openFile, saved, externalChange}}>
       {children}
     </EditorContext.Provider>
   );
