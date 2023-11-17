@@ -11,7 +11,7 @@ function langCompletions(context: CompletionContext): CompletionResult | null {
   if (!context.explicit && !word)
     return null
   return {
-    from: word?.from || context.pos,
+    from: word?.from ?? context.pos,
     options: [
       ...structuresCompletions,
       ...conditionalsCompletions,

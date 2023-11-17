@@ -9,7 +9,7 @@ export const stepcodeLinter = linter(view => {
     let message = error.message
     const actions: Action[] = []
     if (error.message.includes(";")) {
-      const startLine = view.state.doc.line(error.startLine - 1);
+      const startLine = view.state.doc.line(Math.max(1, error.startLine - 1));
       start = startLine.to
       end = startLine.to + 1
       message = 'Falta un ";" al final de la instrucción'
@@ -26,7 +26,7 @@ export const stepcodeLinter = linter(view => {
       const startLine = view.state.doc.line(error.startLine);
       start = startLine.from + error.startColumn;
       const endLine = view.state.doc.line(error.endLine);
-      end = endLine.from + error.endColumn;
+      end = Math.min(endLine.to, endLine.from + error.endColumn);
     }
     diagnostics.push({
       from: start,

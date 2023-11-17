@@ -21,16 +21,16 @@ import { foldOnIndent } from './codemirror/fold-on-indent.ts';
 
 export function Editor() {
   const ref = useRef<HTMLDivElement>(null);
-  const { content, setContent } = useEditor();
+  const { content, setContent, externalChange } = useEditor();
   const {theme} = useTheme()
   const [fontSize, setFontSize] = useState(14);
+  const viewRef = useRef<EditorView | null>(null);
 
   const onUpdate = EditorView.updateListener.of((v) => {
     const value = v.state.doc.toString();
     const matches = value.matchAll(/(->|<-|!=|<=|>=)/g);
     const changes = [];
     for (const match of matches) {
-      console.log(match);
       changes.push({
         from: match.index!,
         to: match.index! + match[0].length,
@@ -55,7 +55,6 @@ export function Editor() {
         basicSetup,
         keymap.of([...defaultKeymap, indentWithTab]),
         theme === 'dark' ? oneDarkTheme : atomLightTheme,
-        onUpdate,
         foldOnIndent(),
         stepCodeLanguage,
         stepcodeCompletions,
@@ -70,15 +69,27 @@ export function Editor() {
             activeLight: '#727272',
           }
         }),
-        placeholder('Empiece a escribir para descartar o no mostrar esto de nuevo...')
+        onUpdate,
+        placeholder('Empieza a escribir para descartar este mensaje...')
       ],
     })
-    const view = new EditorView({ state, parent: ref.current! })
-
+    const view = new EditorView({ state, parent: ref.current })
+    viewRef.current = view;
     return () => {
       view.destroy()
     }
   }, [theme])
+
+  useEffect(() => {
+    if (!viewRef.current) return
+    viewRef.current.dispatch({
+      changes: {
+        from: 0,
+        to: viewRef.current.state.doc.length,
+        insert: content,
+      }
+    })
+  }, [externalChange]);
 
 
   function changeZoom(e: WheelEvent) {
