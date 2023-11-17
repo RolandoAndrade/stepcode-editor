@@ -1,0 +1,84 @@
+#editor {
+    max-height: 100%;
+    height: 100%;
+}
+
+.cm-cursor {
+    width: 2px !important;
+    background-color: white;
+    border-left: 5px solid white;
+}
+
+html[class='light'] {
+    .cm-cursor {
+        background-color: #505050;
+    }
+}
+
+.cm-lineNumbers > .cm-gutterElement {
+    width: 38px !important;
+}
+
+.cm-foldGutter > .cm-gutterElement > span {
+    font-size: 0px;
+    padding-right: 20px; /* Add some padding to create space for the caret */
+}
+
+.cm-foldGutter span:not([title="Unfold line"]){
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+}
+
+.cm-foldGutter:hover span {
+    opacity: 1;
+}
+
+.cm-foldGutter > .cm-gutterElement > span {
+    font-size: 0px;
+    padding-right: 20px; /* Add some padding to create space for the caret */
+}
+
+.cm-foldGutter > .cm-gutterElement {
+    position: relative;
+}
+
+.cm-foldGutter > .cm-gutterElement > span[title='Fold line']::after {
+    font-size: 12px;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 5px; /* Adjust the position of the caret */
+    transform: translateY(-50%) rotate(45deg); /* Rotate the caret */
+    width: 8px;
+    height: 8px;
+    border-bottom: 1px solid white; /* Adjust the color and thickness of the caret */
+    border-right: 1px solid white; /* Adjust the color and thickness of the caret */
+}
+
+
+.cm-foldGutter > .cm-gutterElement > span[title='Unfold line']::after {
+    font-size: 12px;
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 5px; /* Adjust the position of the caret */
+    transform: translateY(-50%) rotate(-45deg); /* Rotate the caret */
+    width: 8px;
+    height: 8px;
+    border-bottom: 1px solid white; /* Adjust the color and thickness of the caret */
+    border-right: 1px solid white; /* Adjust the color and thickness of the caret */
+}
+
+
+
+
+#editor { --scrollbar-border-thickness: 0px; --scrollbar-width: 10px; --scrollbar-height: 10px; --scrollbar-border-radius: 10px; --scrollbar-thumb-color: rgba(126, 132, 143, 0.5); --scrollbar-track-color: rgba(75, 82, 99, 0.5); }
+#editor::-webkit-scrollbar { width: var(--scrollbar-width, 5px); height: var(--scrollbar-height, 20px); }
+#editor::-webkit-scrollbar-thumb { background: transparent; border: var(--scrollbar-border-thickness, 3px) solid var(--scrollbar-border-color, rgb(255, 255, 255)); border-radius: var(--scrollbar-border-radius, 4px); }
+#editor::-webkit-scrollbar-track { background: var(--scrollbar-track-color, #A1A1AA); }
+#editor::-webkit-scrollbar-corner { background: var(--scrollbar-corner-color, #FFFFFF); border: var(--scrollbar-border-thickness, 3px) solid var(--scrollbar-border-color, rgb(255, 255, 255)); border-radius: var(--scrollbar-border-radius, 4px); }
+#editor::-webkit-scrollbar-button:vertical:start:increment, #preview::-webkit-scrollbar-button:vertical:end:decrement, #preview::-webkit-scrollbar-button:horizontal:start:increment, #preview::-webkit-scrollbar-button:horizontal:end:decrement { display: var(--show-double-buttons, none); }
+
+#editor:hover::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color, #3B82F6);
+}
