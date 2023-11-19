@@ -1,7 +1,7 @@
 import { Completion } from '@codemirror/autocomplete';
 import {snippetCompletion} from "@codemirror/autocomplete"
 export const definitionCompletions: Completion[] = [
-  snippetCompletion("Definir ${Variable} Como ${TipoVariable};",   {
+  snippetCompletion("Definir ${Variable} Como ${TipoVariable};${}",   {
     label: "Definir",
     type: "keyword",
     detail: "Define una variable",
@@ -41,7 +41,7 @@ export const definitionCompletions: Completion[] = [
     type: "type",
     detail: "Define una variable de tipo cadena",
   }),
-  snippetCompletion("Dimension ${1:Variable}[${2:Dimensiones}];", {
+  snippetCompletion("Dimension ${1:Variable}[${2:Dimensiones}];${}", {
     label: "Dimension",
     type: "keyword",
     detail: "Define una variable de tipo arreglo. Los arreglos son variables que almacenan varios valores.",

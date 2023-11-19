@@ -39,6 +39,7 @@ const keywords = [
   StepCodeLexer.DIMENSION
 ] as const
 
+
 const operators = [
   StepCodeLexer.PLUS,
   StepCodeLexer.MINUS,

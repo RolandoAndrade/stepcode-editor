@@ -16,7 +16,7 @@ export const conditionalsCompletions: Completion[] = [
     type: "keyword",
     detail: "Estructura condicional. Si no se cumple la condición anterior, se evalúa la siguiente condición.",
   }),
-  snippetCompletion("Sino\n\t${// Codigo}\nFinSi",   {
+  snippetCompletion("Sino\n\t${// Codigo}",   {
     label: "Sino",
     type: "keyword",
     detail: "Estructura condicional. Si no se cumple la condición, se ejecuta el bloque de código dentro de la estructura.",

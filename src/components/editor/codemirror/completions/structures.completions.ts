@@ -33,7 +33,7 @@ export const structuresCompletions: Completion[] = [
     type: "method",
     detail: "Define una funcion. Las funciones son bloques de código que retornan un valor.",
   }),
-  snippetCompletion("Funcion ${VariableDeRetorno} ← ${NombreFuncion}(${Parametros})\n\t${// Descripcion de la funcion}\n\tDefinir ${VariableDeRetorno} Como ${TipoVariable};\nFinFuncion",     {
+  snippetCompletion("Funcion ${VariableDeRetorno} ← ${NombreFuncion}(${Parametros})\n\t${// Descripcion de la funcion}\n\tDefinir ${VariableDeRetorno} Como ${TipoVariable};${}\nFinFuncion",     {
     label: "Funcion PSeInt",
     type: "method",
     detail: "Define una funcion. Las funciones son bloques de código que retornan un valor",
