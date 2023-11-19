@@ -25,7 +25,7 @@
     "react-hotkeys-hook": "^4.4.1",
     "react-icons": "^4.11.0",
     "react-resizable-panels": "^0.0.55",
-    "stepcode": "0.7.3"
+    "stepcode": "0.8.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",
