@@ -20,6 +20,8 @@
     "@uiw/codemirror-themes": "^4.21.20",
     "codemirror": "^6.0.1",
     "html-to-image": "1.11.11",
+    "html2canvas": "^1.4.1",
+    "modern-screenshot": "^4.4.34",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hotkeys-hook": "^4.4.1",

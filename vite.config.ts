@@ -5,7 +5,7 @@ import { VitePWAOptions } from 'vite-plugin-pwa';
 
 const pwaOptions: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
-  includeAssets: ["favicon.ico", "apple-touch-icon-180x180.png", "maskable_icon-512x512.png", "stepcode.png"],
+  includeAssets: ["favicon.ico", "apple-touch-icon-180x180.png", "maskable-icon-512x512.png"],
   devOptions: {
     enabled: true,
   },
@@ -31,7 +31,7 @@ const pwaOptions: Partial<VitePWAOptions> = {
         purpose: "apple touch icon",
       },
       {
-        src: "/maskable_icon-512x512.png",
+        src: "/maskable-icon-512x512.png",
         sizes: "512x512",
         type: "image/png",
         purpose: "any maskable",

@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useRef } from 'react';
 import { useLocalStorage, useWindowSize } from '@uidotdev/usehooks';
-import { toCanvas } from 'html-to-image';
+import { domToCanvas } from 'modern-screenshot';
+import { AtomOneLightColors, OneDarkColors } from '../core/colors/colors.ts';
 
 type ThemeContext = {
   theme: string;
@@ -39,33 +40,29 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
   const {width, height} = useWindowSize();
 
   async function takeScreenshot(): Promise<HTMLCanvasElement> {
-    return toCanvas(document.getElementsByTagName('body')[0], {
-      width: (width || window.innerWidth) * devicePixelRatio,
-      height: (height || window.innerHeight) * devicePixelRatio,
-      canvasWidth: (width || window.innerWidth) * devicePixelRatio,
-      canvasHeight: (height || window.innerHeight) * devicePixelRatio,
-      pixelRatio: window.devicePixelRatio,
-      quality: 1,
-      skipAutoScale: true,
-      skipFonts: true,
-    })
+    return domToCanvas(document.body, {
+      width: (width || document.body.clientWidth),
+      height: (height || document.body.clientHeight),
+    });
   }
 
   async function handleChange(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     const editor = document.getElementById('editor')!;
     editor.style.overflow = 'hidden';
     const canvas = await takeScreenshot();
-    editor.style.overflow = 'auto';
     const canvasWrapper = canvasRef.current!;
     canvasWrapper.style.display = 'block';
     const { pageX, pageY } = e;
     const { clientWidth, clientHeight } = document.body;
     const startDate = Date.now();
-    canvasWrapper.width = (width || clientWidth) * devicePixelRatio;
-    canvasWrapper.height = (height || clientHeight) * devicePixelRatio;
+    canvasWrapper.width = (width || clientWidth) ;
+    canvasWrapper.height = (height || clientHeight) ;
+
     const ctx = canvasWrapper.getContext("2d")!;
+    ctx.fillStyle = theme === 'light' ? AtomOneLightColors.white : OneDarkColors.black;
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(canvas, 0, 0)
+    ctx.fillRect(0, 0, clientWidth, clientHeight);
+    ctx.drawImage(canvas, -8, -8)
     if (theme === 'light') {
       ctx.globalCompositeOperation = "destination-out";
     } else {
@@ -86,10 +83,13 @@ export function ThemeContextProvider({children}: {children: React.ReactNode}) {
         radius = finalRadius * progress;
       }
       ctx.beginPath();
-      ctx.arc(pageX + 60, pageY + 10, radius, 0, 2 * Math.PI);
+      ctx.arc(pageX, pageY, radius, 0, 2 * Math.PI);
       ctx.fill();
       if (progress < 1) requestAnimationFrame(render);
-      else canvasWrapper.style.display = 'none';
+      else {
+        canvasWrapper.style.display = 'none';
+        editor.style.overflow = 'auto';
+      }
     };
     setTheme(theme === 'dark' ? 'light' : 'dark');
     requestAnimationFrame(render);
