@@ -91,3 +91,13 @@ html[class='light'] {
 #editor:hover::-webkit-scrollbar-thumb {
     background: var(--scrollbar-thumb-color, #3B82F6);
 }
+
+.cm-scroller { --scrollbar-border-thickness: 0px; --scrollbar-width: 10px; --scrollbar-height: 10px; --scrollbar-border-radius: 10px; --scrollbar-thumb-color: rgba(126, 132, 143, 0.5); --scrollbar-track-color: rgba(75, 82, 99, 0.5); }
+.cm-scroller::-webkit-scrollbar { width: var(--scrollbar-width, 5px); height: var(--scrollbar-height, 20px); }
+.cm-scroller::-webkit-scrollbar-thumb { background: transparent; border: var(--scrollbar-border-thickness, 3px) solid var(--scrollbar-border-color, rgb(255, 255, 255)); border-radius: var(--scrollbar-border-radius, 4px); }
+.cm-scroller::-webkit-scrollbar-track { background: var(--scrollbar-track-color, #A1A1AA); }
+.cm-scroller::-webkit-scrollbar-corner { background: var(--scrollbar-corner-color, #FFFFFF); border: var(--scrollbar-border-thickness, 3px) solid var(--scrollbar-border-color, rgb(255, 255, 255)); border-radius: var(--scrollbar-border-radius, 4px); }
+.cm-scroller::-webkit-scrollbar-button:vertical:start:increment, #preview::-webkit-scrollbar-button:vertical:end:decrement, #preview::-webkit-scrollbar-button:horizontal:start:increment, #preview::-webkit-scrollbar-button:horizontal:end:decrement { display: var(--show-double-buttons, none); }
+.cm-scroller:hover::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-color, #3B82F6);
+}
