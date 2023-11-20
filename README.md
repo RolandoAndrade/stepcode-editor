@@ -1,27 +1,37 @@
-# React + TypeScript + Vite
+# StepCode Editor
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a web-based editor for the StepCode language. It is written in TypeScript and uses the [CodeMirror](https://codemirror.net/) editor.
 
-Currently, two official plugins are available:
+## Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+You can try the editor [here](https://stepcode.online/).
 
-## Expanding the ESLint configuration
+<iframe src="https://stepcode.online/" style="width: 100%; height: 500px; border: none;"></iframe>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Motivation
 
-- Configure the top-level `parserOptions` property like this:
+The main motivation for this project is to provide a web-based editor for the StepCode language.
+StepCode is a pseudo-code language for writing step-by-step instructions. It is designed to be easy to read and write,
+and to be easily converted to other languages. It is based on the syntax
+of [PSeInt](http://pseint.sourceforge.net/), a pseudo-code language for teaching programming.
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+## Development
+
+To run the editor locally, you must first install the dependencies:
+
+```
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Then, you can run the editor with the following command:
+
+```
+npm run dev
+```
+
+This will start a development server at `http://localhost:5173`.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
