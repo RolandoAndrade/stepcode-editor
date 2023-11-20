@@ -6,7 +6,7 @@ This is a web-based editor for the StepCode language. It is written in TypeScrip
 
 You can try the editor [here](https://stepcode.online/).
 
-![StepCode Editor screenshot](https://imgur.com/a/oO9W283.png "StepCode Editor screenshot")
+![StepCode Editor screenshot](.github/readmefiles/scs.png "StepCode Editor screenshot")
 
 ## Motivation
 
