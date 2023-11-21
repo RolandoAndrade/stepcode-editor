@@ -6,9 +6,6 @@ import { VitePWAOptions } from 'vite-plugin-pwa';
 const pwaOptions: Partial<VitePWAOptions> = {
   registerType: 'autoUpdate',
   includeAssets: ["favicon.ico", "apple-touch-icon-180x180.png", "maskable-icon-512x512.png"],
-  devOptions: {
-    enabled: true,
-  },
   manifest: {
     name: "StepCode | Editor",
     short_name: "StepCode",
