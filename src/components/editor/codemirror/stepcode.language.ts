@@ -120,10 +120,10 @@ export const stepCodeLanguage = StreamLanguage.define({
       if (stream.match(nextToken.value)) {
         if (nextToken.type === StepCodeLexer.IDENT) {
           if (isFunctionCallIdentifier(stream.string.slice(nextToken.start))) {
-            return 'variableName'
+            return 'variableName.definition'
           }
           if (tokens.find(token => token.type === StepCodeLexer.PROGRAM)) {
-            return 'variableName'
+            return 'variableName.definition'
           }
         }
         return tokenClasses.get(nextToken.type) || 'content'
