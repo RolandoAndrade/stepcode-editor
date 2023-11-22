@@ -27,4 +27,4 @@ function langCompletions(context: CompletionContext): CompletionResult | null {
   }
 }
 
-export const stepcodeCompletions = autocompletion({ override: [langCompletions]});
+export const stepcodeCompletions = autocompletion({ override: [langCompletions], selectOnOpen: false});
