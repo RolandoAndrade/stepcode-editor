@@ -86,6 +86,7 @@ const tokenClasses = new Map<number, string>([
   ...typeNames.map(typeName => [typeName, 'typeName'] as [number, string]),
   ...brackets.map(bracket => [bracket, 'brace'] as [number, string]),
   ...tags.map(tag => [tag, 'tag'] as [number, string]),
+  [StepCodeLexer.DIRECTIVE, 'meta'],
   [StepCodeLexer.STRING_LITERAL, 'string'],
   [StepCodeLexer.NUM_INT, 'number'],
   [StepCodeLexer.NUM_REAL, 'number'],
@@ -124,6 +125,9 @@ export const stepCodeLanguage = StreamLanguage.define({
           }
           if (tokens.find(token => token.type === StepCodeLexer.PROGRAM)) {
             return 'variableName.definition'
+          }
+          if (tokens.find(token => token.type === StepCodeLexer.DIRECTIVE)) {
+            return 'meta'
           }
         }
         return tokenClasses.get(nextToken.type) || 'content'
