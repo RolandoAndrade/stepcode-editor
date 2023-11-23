@@ -65,7 +65,8 @@ simpleStatement {
 compoundStatement {
   IfStatement {
     kw<'Si'> expression kw<'Entonces'>
-    statement
+    Body
+    (!else kw<"Sino"> Body)?
     kw<'FinSi'>
   }
 }
@@ -75,16 +76,23 @@ expression[@isGroup=Expression] {
   BinaryExpression |
   VariableName |
   AssignmentExpression |
+  ParenthesizedExpression
 }
+
+ParenthesizedExpression { "(" expression ")" }
 
 BinaryExpression {
   expression !plus ArithOp<"+" | "-"> expression |
-  expression !times divide | mod | intDivide | ArithOp<"%"> | ArithOp<"*">
-  expression !exp ArithOp<"**"|'^'> expression
+  expression !times divide | mod | intDivide | ArithOp<"*"> expression|
+  expression !exp ArithOp<"**"|'^'> expression |
+  expression !equal CompareOp<"=" | "!="> expression |
+  expression !rel (LessThan | CompareOp<"≤" | ">" | "≥">) expression |
+  expression !and LogicOp<"Y"> expression |
+  expression !or LogicOp<"O"> expression
 }
 
 AssignmentExpression {
-  VariableName !assign "=" expression
+  VariableName !assign "←" expression
 }
 
 ArrayExpression { "[" commaSep<expression>? "]" }
@@ -115,11 +123,9 @@ commaSep<expr> { expr ("," expr)* ","? }
   mod[@name=ArithOp] {"mod"}
 
 
-  @precedence { "/*", LineComment, divide }
-  @precedence { "div", intDivide, identifier }
-  @precedence { "mod", mod, identifier }
-
-  @precedence { "/*", LineComment, RegExp }
+  @precedence { "/", LineComment, divide }
+  @precedence { "div", identifier, intDivide }
+  @precedence { "mod", identifier, mod }
 
   identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
 
@@ -166,19 +172,22 @@ commaSep<expr> { expr ("," expr)* ","? }
   CompareOp<expr> { expr }
   UpdateOp<expr> { expr }
 
-  @precedence { "*", ArithOp }
-
   RegExp { "/" (![/\\\n[] | "\\" ![\n] | "[" (![\n\\\]] | "\\" ![\n])* "]")+ ("/" $[gimsuy]*)? }
 
   LessThan[@name=CompareOp] { "<" }
 
-  "="[@name=Equals]
+  "←"[@name=Equals]
+
+  @precedence { "←", Equals, identifier}
+  @precedence { CompareOp, identifier}
+  @precedence { LogicOp, identifier}
+
   "..."[@name=Spread]
   "=>"[@name=Arrow]
 
-  "(" ")" "[" "]" "{" "}" ">"
+  "(" ")" "[" "]" "{" "}" ">" "≥"
 
-  "?." "." "," ";" ":" "@"
+  "?." "." "," ";" ":" "@" "Y" "O"
 }
 
 @skip {} {
@@ -187,6 +196,5 @@ commaSep<expr> { expr ("," expr)* ","? }
     "'" (stringContentSingle)* ("'" | "\n")
   }
 }
-
 
 semi { ";" }
