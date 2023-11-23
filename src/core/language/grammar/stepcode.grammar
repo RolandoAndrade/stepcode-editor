@@ -1,32 +1,99 @@
-@top Program { statement+ }
+@precedence {
+  cond,
+  trail,
+  power @right,
+  prefix,
+  times @left,
+  plus @left,
+  shift @left,
+  bitand @left,
+  xor @left,
+  bitor @left,
+  compare @left,
+  as @left,
+  and @left,
+  or @left
+}
+
+@top Program { ProgramDefinition }
+
+ProgramDefinition[@isGroup=Program]{
+  kw<"Proceso"> ProgramName
+  Body
+  kw<"FinProceso">
+}
+
+Body { statement+ }
 
 statement[@isGroup=Statement] {
-  ForStatement { kw<"for"> ckw<"await">? (ForSpec | ForInSpec | ForOfSpec) statement } |
-  WhileStatement { kw<"while"> ParenthesizedExpression statement } |
-  WithStatement { kw<"with"> ParenthesizedExpression statement } |
-  DoStatement { kw<"do"> statement kw<"while"> ParenthesizedExpression semi } |
-  IfStatement { kw<"if"> ParenthesizedExpression statement (!else kw<"else"> statement)? } |
-  SwitchStatement { kw<"switch"> ParenthesizedExpression SwitchBody { "{" switchItem* "}" } } |
-  ReturnStatement { kw<"return"> (noSemi expression)? semi } |
-  BreakStatement { kw<"break"> (noSemi Label)? semi } |
-  ContinueStatement { kw<"continue"> (noSemi Label)? semi } |
-  Block |
-  declaration |
-  ExpressionStatement { expression semi } |
+  simpleStatement
   ";"
 }
 
-ForSpec {
-  "("
-  (VariableDeclaration | expression ";" | ";") expression? ";" expression?
-  ")"
+simpleStatement {
+  DefineStatement {
+    kw<'Definir'> commaSep<VariableName> kw<'Como'> VariableType
+  } |
+  WriteStatement {
+    kw<'Escribir'> commaSep<String | VariableName>
+  } |
+  ReadStatement {
+    kw<'Leer'> commaSep<VariableName>
+  }
 }
 
+compoundStatement {
+  kw<'if'>
+}
 
-// Keywords
+ProgramName { identifier }
 
+VariableName { identifier }
+
+VariableType {
+  kw<'Entero'> | kw<'Real'> | kw<'Logico'> | kw<'Cadena'> | kw<'Caracter'>
+}
+
+@skip { spaces | newline | LineComment }
 kw<term> { @specialize[@name={term}]<identifier, term> }
 
-// Contextual keywords
+commaSep<expr> { expr ("," expr)* ","? }
 
-ckw<term> { @extend[@name={term}]<identifier, term> }
+@tokens {
+  spaces[@export] { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]+ }
+  newline[@export] { $[\r\n\u2028\u2029] }
+
+  LineComment { ("//" | '#') ![\n]* }
+
+  divide[@name=ArithOp] { "/" }
+
+  @precedence { "/*", LineComment, divide }
+
+  @precedence { "/*", LineComment, RegExp }
+
+  identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
+
+  word { identifierChar (identifierChar | @digit)* }
+
+  identifier { word }
+
+  privateIdentifier { "#" word }
+
+  @precedence { spaces, newline, identifier }
+
+  @precedence { spaces, newline }
+
+  @precedence { spaces, newline, word }
+
+  stringContentSingle { ![\\\n']+ }
+
+  stringContentDouble { ![\\\n"]+ }
+
+}
+
+@skip {} {
+  String {
+    '"' (stringContentDouble)* ('"' | "\n") |
+    "'" (stringContentSingle)* ("'" | "\n")
+  }
+}
