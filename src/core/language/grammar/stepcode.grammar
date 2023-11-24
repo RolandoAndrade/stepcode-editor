@@ -34,12 +34,12 @@
   predicate
 }
 
-@top Program { ProgramDefinition }
+@top Script { ProgramDefinition }
 
 ProgramDefinition[@isGroup=Program]{
-  kw<"Proceso"> ProgramName
+  proceso ProgramName
   Body
-  kw<"FinProceso">
+  finproceso
 }
 
 Body { statement+ }
@@ -50,13 +50,13 @@ statement[@isGroup=Statement] {
 
 simpleStatement {
   DefineStatement {
-    kw<'Definir'> commaSep<VariableName> kw<'Como'> VariableType semi
+    definir commaSep<VariableName> como VariableType semi
   } |
   WriteStatement {
-    kw<'Escribir'> commaSep<String | VariableName> semi
+    escribir commaSep<String | VariableName> semi
   } |
   ReadStatement {
-    kw<'Leer'> commaSep<VariableName> semi
+    leer commaSep<VariableName> semi
   } |
   ExpressionStatement { expression semi }
 
@@ -64,12 +64,29 @@ simpleStatement {
 
 compoundStatement {
   IfStatement {
-    kw<'Si'> expression kw<'Entonces'>
+    si expression entonces
     Body
-    (!else kw<"Sino"> Body)?
-    kw<'FinSi'>
+    (!else sino Body)?
+    finsi
+  } |
+  SwitchStatement {
+    segun expression hacer
+    SwitchBody {
+      switchItem*
+    }
+    finsegun
   }
 }
+
+switchItem {
+  CaseLabel { expression ":" } |
+  (DefaultLabel { "De otro modo" } ":") |
+  statement
+}
+
+
+
+
 
 expression[@isGroup=Expression] {
   Number | String |
@@ -141,6 +158,8 @@ commaSep<expr> { expr ("," expr)* ","? }
 
   @precedence { spaces, newline, word }
 
+  @precedence { "De otro modo", identifier }
+
   hex { @digit | $[a-fA-F] }
 
   Number {
@@ -198,3 +217,14 @@ commaSep<expr> { expr ("," expr)* ","? }
 }
 
 semi { ";" }
+
+@external propSource stepcodeHighlight from "./highlight"
+
+
+@external specialize {identifier} keywords from "./tokens" {
+    proceso[@name=proceso], finproceso[@name=finproceso],
+    definir[@name=definir], como[@name=como],
+    escribir[@name=escribir], leer[@name=leer],
+    si[@name=si], entonces[@name=entonces], finsi[@name=finsi], sino[@name=sino],
+    segun[@name=segun], hacer[@name=hacer], finsegun[@name=finsegun]
+}

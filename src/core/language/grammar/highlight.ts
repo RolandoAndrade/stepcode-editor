@@ -1,12 +1,13 @@
 import {styleTags, tags as t} from "@lezer/highlight"
 
-export const jsHighlight = styleTags({
+export const stepcodeHighlight = styleTags({
   "get set async static": t.modifier,
-  "for while do if else switch try catch finally return throw break continue default case": t.controlKeyword,
+  "para mientras hacer si sino entonces segun romper continuar repetir proceso finproceso algoritmo finsi finsegun": t.controlKeyword,
   "in of await yield void typeof delete instanceof": t.operatorKeyword,
-  "let var const using function class extends": t.definitionKeyword,
+  "definir como": t.definitionKeyword,
   "import export from": t.moduleKeyword,
-  "with debugger as new": t.keyword,
+  "escribir leer": t.keyword,
+  ProgramName: t.className,
   TemplateString: t.special(t.string),
   super: t.atom,
   BooleanLiteral: t.bool,
@@ -30,6 +31,7 @@ export const jsHighlight = styleTags({
   Number: t.number,
   String: t.string,
   Escape: t.escape,
+  term: t.keyword,
   ArithOp: t.arithmeticOperator,
   LogicOp: t.logicOperator,
   BitOp: t.bitwiseOperator,
@@ -51,11 +53,5 @@ export const jsHighlight = styleTags({
   "type enum interface implements namespace module declare": t.definitionKeyword,
   "abstract global Privacy readonly override": t.modifier,
   "is keyof unique infer": t.operatorKeyword,
-
-  JSXAttributeValue: t.attributeValue,
-  JSXText: t.content,
-  "JSXStartTag JSXStartCloseTag JSXSelfCloseEndTag JSXEndTag": t.angleBracket,
-  "JSXIdentifier JSXNameSpacedName": t.tagName,
-  "JSXAttribute/JSXIdentifier JSXAttribute/JSXNameSpacedName": t.attributeName,
-  "JSXBuiltin/JSXIdentifier": t.standard(t.tagName)
+  DefaultLabel: t.controlKeyword,
 })

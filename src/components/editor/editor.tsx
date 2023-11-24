@@ -1,12 +1,12 @@
 import './editor.css';
 import { useEffect, useRef, useState } from 'react';
 import { useEditor } from '../editor-context.tsx';
-import { EditorState } from '@codemirror/state';
+import { ChangeSpec, EditorState } from '@codemirror/state';
 import { EditorView, placeholder } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { keymap } from '@codemirror/view';
 import { defaultKeymap, indentWithTab } from '@codemirror/commands'
-import { stepCodeLanguage } from './codemirror/stepcode.language.ts';
+import { stepCodeLanguage } from './codemirror/stepcode.language.new.ts';
 import { stepcodeCompletions } from './codemirror/completions/stepcode.completions.ts';
 import { indentUnit } from '@codemirror/language';
 import { stepcodeLinter } from './codemirror/stepcode.linter.ts';
@@ -29,7 +29,7 @@ export function Editor() {
   const onUpdate = EditorView.updateListener.of((v) => {
     const value = v.state.doc.toString();
     const matches = value.matchAll(/(->|<-|!=|<=|>=)/g);
-    const changes = [];
+    const changes: ChangeSpec[] = [];
     for (const match of matches) {
       changes.push({
         from: match.index!,
