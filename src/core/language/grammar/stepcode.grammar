@@ -50,7 +50,7 @@ statement[@isGroup=Statement] {
 
 simpleStatement {
   DefineStatement {
-    definir commaSep<VariableName> como VariableType semi
+    definir commaSep<VariableDefinition{VariableName}> como VariableType semi
   } |
   WriteStatement {
     escribir commaSep<String | VariableName> semi
