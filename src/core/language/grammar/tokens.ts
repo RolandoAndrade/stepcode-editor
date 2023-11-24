@@ -1,14 +1,16 @@
 import {
+  cadena,
+  caracter,
   como,
-  definir,
+  definir, entero,
   entonces,
   escribir,
   finproceso,
   finsegun,
   finsi,
   hacer,
-  leer,
-  proceso,
+  leer, logico,
+  proceso, real,
   segun,
   si,
   sino
@@ -27,7 +29,12 @@ const keywordsMap = new Map([
   ['finsi', finsi],
   ['segun', segun],
   ['hacer', hacer],
-  ['finsegun', finsegun]
+  ['finsegun', finsegun],
+  ['entero', entero],
+  ['real', real],
+  ['caracter', caracter],
+  ['logico', logico],
+  ['cadena', cadena],
 ])
 
 export function keywords(name: string) {

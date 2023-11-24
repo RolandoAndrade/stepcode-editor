@@ -46,10 +46,20 @@ function completeStepCode(context: CompletionContext) {
   const word = context.matchBefore(/\w*/)
   if (!context.explicit && (!word || word.from === word.to))
     return null
+  const tree = syntaxTree(context.state)
+  const node = tree.resolveInner(context.pos, -1)
+  if (node.parent?.name === 'Script') {
+    return {
+      from: word?.from ?? context.pos,
+      options: [
+        ...structuresCompletions,
+      ],
+      validFor: /^\w*$/,
+    }
+  }
   return {
     from: word?.from ?? context.pos,
     options: [
-      ...structuresCompletions,
       ...conditionalsCompletions,
       ...loopCompletions,
       ...definitionCompletions,

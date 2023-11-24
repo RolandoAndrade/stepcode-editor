@@ -47,8 +47,8 @@ export const stepcodeHighlight = styleTags({
   ".": t.derefOperator,
   ", ;": t.separator,
   "@": t.meta,
-
   TypeName: t.typeName,
+  'entero real cadena caracter logico': t.typeName,
   TypeDefinition: t.definition(t.typeName),
   "type enum interface implements namespace module declare": t.definitionKeyword,
   "abstract global Privacy readonly override": t.modifier,

@@ -84,10 +84,6 @@ switchItem {
   statement
 }
 
-
-
-
-
 expression[@isGroup=Expression] {
   Number | String |
   BinaryExpression |
@@ -120,7 +116,7 @@ ProgramName { identifier }
 VariableName { identifier }
 
 VariableType {
-  kw<'Entero'> | kw<'Real'> | kw<'Logico'> | kw<'Cadena'> | kw<'Caracter'>
+  entero | real | logico | cadena | caracter
 }
 
 @skip { spaces | newline | LineComment }
@@ -226,5 +222,6 @@ semi { ";" }
     definir[@name=definir], como[@name=como],
     escribir[@name=escribir], leer[@name=leer],
     si[@name=si], entonces[@name=entonces], finsi[@name=finsi], sino[@name=sino],
-    segun[@name=segun], hacer[@name=hacer], finsegun[@name=finsegun]
+    segun[@name=segun], hacer[@name=hacer], finsegun[@name=finsegun],
+    entero[@name=entero], real[@name=real], logico[@name=logico], cadena[@name=cadena], caracter[@name=caracter]
 }
