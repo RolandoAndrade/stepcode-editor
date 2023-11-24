@@ -32,6 +32,5 @@ const keywordsMap = new Map([
 
 export function keywords(name: string) {
   name = name?.toLowerCase()
-  console.log(name)
   return keywordsMap.has(name) ? keywordsMap.get(name) : -1
 }
