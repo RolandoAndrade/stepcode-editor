@@ -5,16 +5,11 @@ import { conditionalsCompletions } from './conditionals.completions.ts';
 import { loopCompletions } from './loop.completions.ts';
 import { definitionCompletions } from './definition.completions.ts';
 import { functionCompletions } from './function.completions.ts';
-import {syntaxTree} from "@codemirror/language"
 
 function langCompletions(context: CompletionContext): CompletionResult | null {
   const word = context.matchBefore(/\w*/)
-  if (!context.explicit && !word)
+  if (!context.explicit && (!word || word.from === word.to))
     return null
-  const nodeBefore = syntaxTree(context.state).resolveInner(context.pos, -1)
-  if (['variableName', 'variableName.definition'].includes(nodeBefore?.type.name || '')) {
-    return null
-  }
   return {
     from: word?.from ?? context.pos,
     options: [
@@ -27,4 +22,4 @@ function langCompletions(context: CompletionContext): CompletionResult | null {
   }
 }
 
-export const stepcodeCompletions = autocompletion({ override: [langCompletions], selectOnOpen: false});
+export const stepcodeCompletions = autocompletion({ override: [langCompletions]});
