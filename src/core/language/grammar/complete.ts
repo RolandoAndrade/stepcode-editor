@@ -24,6 +24,7 @@ const functionContext = ["FunctionDeclaration"]
 const gatherCompletions: {
   [node: string]: (node: SyntaxNodeRef, def: (node: SyntaxNodeRef, type: string) => void) => void | boolean
 } = {
+  ProgramDefinition: defID("program"),
   FunctionDeclaration: defID("function"),
   ClassDeclaration: defID("class"),
   ClassExpression: () => true,
@@ -76,16 +77,13 @@ export const dontComplete = [
 /// JavaScript code.
 export function localCompletionSource(context: CompletionContext): CompletionResult | null {
   const inner = syntaxTree(context.state).resolveInner(context.pos, -1)
-
   if (dontComplete.indexOf(inner.name) > -1) return null
   const isWord = inner.name == "VariableName" ||
     inner.to - inner.from < 20 && Identifier.test(context.state.sliceDoc(inner.from, inner.to))
   if (!isWord && !context.explicit) return null
   let options: Completion[] = []
-  console.log('new')
   for (let pos: SyntaxNode | null = inner; pos; pos = pos.parent) {
     if (ScopeNodes.has(pos.name)) {
-      console.log(pos)
       options = options.concat(getScope(context.state.doc, pos))
     }
   }
