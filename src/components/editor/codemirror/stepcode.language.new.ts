@@ -1,5 +1,5 @@
 import { parser } from '../../../core/language/grammar/stepcode.ts';
-import {foldNodeProp, foldInside, indentNodeProp, continuedIndent} from "@codemirror/language"
+import { foldNodeProp, foldInside, indentNodeProp, continuedIndent, syntaxTree } from '@codemirror/language'
 import {LRLanguage, LanguageSupport} from "@codemirror/language"
 import { localCompletionSource } from '../../../core/language/grammar/complete.ts';
 import { conditionalsCompletions } from './completions/conditionals.completions.ts';
@@ -7,6 +7,7 @@ import { structuresCompletions } from './completions/structures.completions.ts';
 import { loopCompletions } from './completions/loop.completions.ts';
 import { definitionCompletions } from './completions/definition.completions.ts';
 import { functionCompletions } from './completions/function.completions.ts';
+import { CompletionContext } from '@codemirror/autocomplete';
 
 const stepCodeParser = parser.configure({
   props: [
@@ -41,19 +42,30 @@ export const stepCodeLanguage = LRLanguage.define({
   languageData: {}
 })
 
+function completeStepCode(context: CompletionContext) {
+  const word = context.matchBefore(/\w*/)
+  if (!context.explicit && (!word || word.from === word.to))
+    return null
+  return {
+    from: word?.from ?? context.pos,
+    options: [
+      ...structuresCompletions,
+      ...conditionalsCompletions,
+      ...loopCompletions,
+      ...definitionCompletions,
+      ...functionCompletions
+    ],
+    validFor: /^\w*$/,
+  }
+}
+
 export function stepCode() {
   return new LanguageSupport(stepCodeLanguage, [
     stepCodeLanguage.data.of({
       autocomplete: localCompletionSource
     }),
     stepCodeLanguage.data.of({
-      autocomplete: [
-        ...structuresCompletions,
-        ...conditionalsCompletions,
-        ...loopCompletions,
-        ...definitionCompletions,
-        ...functionCompletions
-      ]
+      autocomplete: completeStepCode
     })
   ])
 }
