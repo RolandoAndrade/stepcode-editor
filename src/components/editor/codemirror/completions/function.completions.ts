@@ -27,9 +27,19 @@ export const functionCompletions: Completion[] = [
     type: "function",
     detail: "Función para convertir una cadena a mayúsculas. Retorna una cadena",
   }),
-  snippetCompletion("Minuscula(${Cadena})",   {
+  snippetCompletion("Minusculas(${Cadena})",   {
     label: "Minusculas",
     type: "function",
     detail: "Función para convertir una cadena a minúsculas. Retorna una cadena",
+  }),
+  snippetCompletion('ConvertirANumero(${Cadena})',   {
+    label: "ConvertirANumero",
+    type: "function",
+    detail: "Función para convertir una cadena a número. Retorna un número",
+  }),
+  snippetCompletion('ConvertirACadena(${Numero})',   {
+    label: "ConvertirACadena",
+    type: "function",
+    detail: "Función para convertir un número a cadena. Retorna una cadena",
   }),
 ]
