@@ -1,200 +1,357 @@
 @precedence {
-  typeargs,
-  typeMember,
-  typePrefix,
-  intersection @left,
-  union @left,
-  typeExtends @right,
-  else @right,
-  member,
-  readonly,
-  newArgs,
-  call,
-  taggedTemplate,
+  cond,
+  trail,
+  power @right,
   prefix,
-  postfix,
-  typeof,
-  exp @left,
   times @left,
   plus @left,
   shift @left,
-  loop,
-  rel @left,
-  satisfies,
-  equal @left,
-  bitOr @left,
-  bitXor @left,
-  bitAnd @left,
+  bitand @left,
+  xor @left,
+  bitor @left,
+  compare @left,
+  as @left,
   and @left,
-  or @left,
-  ternary @right,
-  assign @right,
-  comma @left,
-  statement @cut,
-  predicate
+  or @left
 }
 
-@top Program { ProgramDefinition }
+@top Script { statement+ }
 
-ProgramDefinition[@isGroup=Program]{
-  kw<"Proceso"> ProgramName
+@skip { space | newlineBracketed | Comment | blankLine }
+
+Decorator { At dottedName ArgList? newline }
+
+FunctionDefinition {
+  kw<"async">? kw<"def"> VariableName TypeParamList?
+  ParamList
+  TypeDef { "->" test }?
   Body
-  kw<"FinProceso">
 }
 
-Body { statement+ }
+ParamList { "(" commaSep<param>? ")" }
 
-statement[@isGroup=Statement] {
-  (simpleStatement | compoundStatement)
+TypeParamList { "[" commaSep<TypeParam> "]" }
+
+TypeParam {
+  ("*" | "**") VariableName |
+  VariableName TypeDef?
 }
+
+MatchStatement {
+  skw<"match"> "*"? expression MatchBody { ":" newline indent MatchClause+ (dedent | eof) }
+}
+
+MatchClause {
+  skw<"case"> commaSep<pattern> Guard { kw<"if"> expression }? Body
+}
+
+pattern[@isGroup=Pattern] {
+  CapturePattern { VariableName } |
+  LiteralPattern |
+  AsPattern { pattern !as kw<"as"> VariableName } |
+  OrPattern { pattern (!or LogicOp{"|"} pattern)+ } |
+  AttributePattern |
+  SequencePattern |
+  MappingPattern |
+  StarPattern { "*" !prefix pattern } |
+  ClassPattern { (VariableName | AttributePattern) PatternArgList }
+}
+
+AttributePattern { VariableName ("." PropertyName)+ }
+
+LiteralPattern {
+  ArithOp{"-"}? Number (ArithOp{"+"|"-"} Number)? |
+  String |
+  kw<"None"> |
+  @specialize[@name=Boolean]<identifier, "True" | "False">
+}
+
+PatternArgList { "(" commaSep<pattern | KeywordPattern { VariableName "=" pattern }> ")" }
+
+SequencePattern { "[" commaSep<pattern> "]" | "(" commaSep<pattern> ")" }
+
+MappingPattern { "{" commaSep<"**" pattern | (VariableName | LiteralPattern) ":" pattern> "}" }
+
+ClassDefinition { kw<"class"> VariableName TypeParamList? ArgList? Body }
+
+param { VariableName TypeDef? (AssignOp{"="} test)? | "*" VariableName? | "**" VariableName | "/" }
+
+TypeDef { ":" test }
+
+statement[@isGroup=Statement] { simpleStatement | compoundStatement }
 
 simpleStatement {
-  DefineStatement {
-    kw<'Definir'> commaSep<VariableName> kw<'Como'> VariableType semi
-  } |
-  WriteStatement {
-    kw<'Escribir'> commaSep<String | VariableName> semi
-  } |
-  ReadStatement {
-    kw<'Leer'> commaSep<VariableName> semi
-  } |
-  ExpressionStatement { expression semi }
-
+  smallStatement (newline | eof) |
+  StatementGroup { smallStatement (";" smallStatement?)+ (newline | eof) }
 }
 
-compoundStatement {
-  IfStatement {
-    kw<'Si'> expression kw<'Entonces'>
-    Body
-    (!else kw<"Sino"> Body)?
-    kw<'FinSi'>
-  }
+smallStatement {
+  AssignStatement { expressions (TypeDef? (AssignOp{"="} (YieldExpression | expressions))+ | TypeDef) } |
+  UpdateStatement { expressions UpdateOp (YieldExpression | commaSep<test>) } |
+  ExpressionStatement { expressions } |
+  DeleteStatement { kw<"del"> commaSep<expression> } |
+  PassStatement { kw<"pass"> } |
+  BreakStatement { kw<"break"> } |
+  ContinueStatement { kw<"continue"> } |
+  ReturnStatement { kw<"return"> commaSep<test | "*" expression>? } |
+  YieldStatement { yield } |
+  PrintStatement { printKeyword test } |
+  RaiseStatement { kw<"raise"> (test (kw<"from"> test | ("," test ("," test)?))?)? } |
+  ImportStatement |
+  ScopeStatement { (kw<"global"> | kw<"nonlocal">) commaSep<VariableName> } |
+  AssertStatement { kw<"assert"> commaSep<test> } |
+  TypeDefinition { skw<"type"> VariableName TypeParamList? "=" test }
 }
 
-expression[@isGroup=Expression] {
-  Number | String |
-  BinaryExpression |
-  VariableName |
-  AssignmentExpression |
-  ParenthesizedExpression
+expressions { commaSep<"*" expression | test> }
+
+ImportStatement {
+  kw<"import"> dottedName (kw<"as"> VariableName)? |
+  kw<"from"> (("." | "...")+ dottedName? | dottedName) kw<"import"> ("*" | importList | importedNames)
 }
-
-ParenthesizedExpression { "(" expression ")" }
-
-BinaryExpression {
-  expression !plus ArithOp<"+" | "-"> expression |
-  expression !times divide | mod | intDivide | ArithOp<"*"> expression|
-  expression !exp ArithOp<"**"|'^'> expression |
-  expression !equal CompareOp<"=" | "!="> expression |
-  expression !rel (LessThan | CompareOp<"≤" | ">" | "≥">) expression |
-  expression !and LogicOp<"Y"> expression |
-  expression !or LogicOp<"O"> expression
-}
-
-AssignmentExpression {
-  VariableName !assign "←" expression
-}
-
-ArrayExpression { "[" commaSep<expression>? "]" }
-
-
-ProgramName { identifier }
-
-VariableName { identifier }
-
-VariableType {
-  kw<'Entero'> | kw<'Real'> | kw<'Logico'> | kw<'Cadena'> | kw<'Caracter'>
-}
-
-@skip { spaces | newline | LineComment }
-kw<term> { @specialize[@name={term}]<identifier, term> }
+importedNames { commaSep<VariableName | VariableName kw<"as"> VariableName> }
+importList[@export] { "(" importedNames ")" }
 
 commaSep<expr> { expr ("," expr)* ","? }
 
-@tokens {
-  spaces[@export] { $[\u0009 \u000b\u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]+ }
-  newline[@export] { $[\r\n\u2028\u2029] }
-
-  LineComment { ("//" | '#') ![\n]* }
-
-  divide[@name=ArithOp] { "/" }
-
-  intDivide[@name=ArithOp] { "div" }
-  mod[@name=ArithOp] {"mod"}
-
-
-  @precedence { "/", LineComment, divide }
-  @precedence { "div", identifier, intDivide }
-  @precedence { "mod", identifier, mod }
-
-  identifierChar { @asciiLetter | $[_$\u{a1}-\u{10ffff}] }
-
-  word { identifierChar (identifierChar | @digit)* }
-
-  identifier { word }
-
-  privateIdentifier { "#" word }
-
-  @precedence { spaces, newline, identifier }
-
-  @precedence { spaces, newline }
-
-  @precedence { spaces, newline, word }
-
-  hex { @digit | $[a-fA-F] }
-
-  Number {
-    (@digit ("_" | @digit)* ("." ("_" | @digit)*)? | "." @digit ("_" | @digit)*)
-      (("e" | "E") ("+" | "-")? ("_" | @digit)+)? |
-    @digit ("_" | @digit)* "n" |
-    "0x" (hex | "_")+ "n"? |
-    "0b" $[01_]+ "n"? |
-    "0o" $[0-7_]+ "n"?
-  }
-
-  @precedence { Number "." }
-
-  Escape {
-    "\\" ("x" hex hex | "u" ("{" hex+ "}" | hex hex hex hex) | ![xu])
-  }
-
-  stringContentSingle { ![\\\n']+ }
-
-  stringContentDouble { ![\\\n"]+ }
-
-  templateStart { "`" }
-
-  InterpolationEnd[openedBy=InterpolationStart] { "}" }
-
-  ArithOp<expr> { expr }
-  LogicOp<expr> { expr }
-  BitOp<expr> { expr }
-  CompareOp<expr> { expr }
-  UpdateOp<expr> { expr }
-
-  RegExp { "/" (![/\\\n[] | "\\" ![\n] | "[" (![\n\\\]] | "\\" ![\n])* "]")+ ("/" $[gimsuy]*)? }
-
-  LessThan[@name=CompareOp] { "<" }
-
-  "←"[@name=Equals]
-
-  @precedence { "←", Equals, identifier}
-  @precedence { CompareOp, identifier}
-  @precedence { LogicOp, identifier}
-
-  "..."[@name=Spread]
-  "=>"[@name=Arrow]
-
-  "(" ")" "[" "]" "{" "}" ">" "≥"
-
-  "?." "." "," ";" ":" "@" "Y" "O"
+compoundStatement {
+  IfStatement |
+  WhileStatement { kw<"while"> testNamed Body elseClause? } |
+  ForStatement { kw<"async">? kw<"for"> commaSep<"*"? expression> kw<"in"> commaSep<test> Body elseClause? } |
+  TryStatement |
+  WithStatement { kw<"async">? kw<"with"> commaSep<test (kw<"as"> VariableName)?> Body } |
+  FunctionDefinition |
+  ClassDefinition |
+  DecoratedStatement { Decorator+ (ClassDefinition | FunctionDefinition) } |
+  MatchStatement
 }
+
+elseClause { kw<"else"> Body }
+
+IfStatement {
+  kw<"if"> testNamed Body
+  (kw<"elif"> testNamed? Body)*
+  elseClause?
+}
+
+TryStatement {
+  kw<"try"> Body
+  (kw<"except"> "*"? (test ((kw<"as"> | ",") VariableName)?)? Body)*
+  elseClause?
+  (kw<"finally"> Body)?
+}
+
+Body { ":" (simpleStatement | newline indent statement+ (dedent | eof)) }
+
+lambdaParam { VariableName (AssignOp{"="} test)? | "*" VariableName? | "**" VariableName }
+
+lambdaParams[@name="ParamList"] { (lambdaParam ("," lambdaParam)*)? }
+
+test {
+ testInner |
+ ConditionalExpression { testInner !cond kw<"if"> testInner kw<"else"> test } |
+ LambdaExpression { kw<"lambda"> lambdaParams ":" test }
+}
+
+testNoCond {
+  testInner |
+  LambdaExpression { kw<"lambda"> lambdaParams ":" testNoCond }
+}
+
+testNamed {
+  test | NamedExpression { test AssignOp{":="} test }
+}
+
+testInner { binaryTest | unaryTest | expression }
+
+binaryTest[@name="BinaryExpression"] {
+  testInner !or kw<"or"> testInner |
+  testInner !and kw<"and"> testInner |
+  testInner !compare (CompareOp | kw<"in"> | kw<"not"> kw<"in"> | kw<"is"> kw<"not">?) testInner
+}
+
+unaryTest[@name="UnaryExpression"] { kw<"not"> testInner }
+
+expression[@isGroup=Expression] {
+  BinaryExpression |
+  UnaryExpression { !prefix (ArithOp{"+" | "-"} | BitOp{"~"}) expression } |
+  AwaitExpression { kw<"await"> expression } |
+  ParenthesizedExpression |
+  TupleExpression |
+  ComprehensionExpression |
+  ArrayExpression |
+  ArrayComprehensionExpression |
+  DictionaryExpression |
+  DictionaryComprehensionExpression |
+  SetExpression |
+  SetComprehensionExpression |
+  CallExpression { expression !trail ArgList } |
+  MemberExpression { expression !trail (subscript | "." PropertyName) } |
+  VariableName |
+  Number |
+  String | FormatString |
+  ContinuedString { (String | FormatString) (String | FormatString)+ } |
+  "..." |
+  kw<"None"> |
+  @specialize[@name=Boolean]<identifier, "True" | "False">
+}
+
+subscript[@export] {
+  "[" commaSep<testNamed | testNamed? ":" testNamed? (":" testNamed?)?> "]"
+}
+
+ParenthesizedExpression { "(" (testNamed | "*" expression | YieldExpression) ")" }
+
+TupleExpression { "(" ((testNamed | "*" expression) (("," (testNamed | "*" expression))+ ","? | ","))? ")" }
+ComprehensionExpression { "(" (testNamed | "*" expression) compFor ")" }
+
+ArrayExpression { "[" commaSep<testNamed | "*" expression>? "]" }
+ArrayComprehensionExpression { "[" (testNamed | "*" expression) compFor "]" }
+
+DictionaryExpression { "{" commaSep<test ":" test | "**" expression>? "}" }
+DictionaryComprehensionExpression { "{" (test ":" test | "**" expression) compFor "}" }
+
+SetExpression { "{" commaSep<test | "*" expression> "}" }
+SetComprehensionExpression { "{" (test | "*" expression) compFor "}" }
+
+yield { kw<"yield"> (kw<"from"> test | commaSep<test | "*" expression>) }
+
+YieldExpression { yield }
+
+BinaryExpression {
+  expression !bitor BitOp{"|"} expression |
+  expression !xor BitOp{"^"} expression |
+  expression !bitand BitOp{"&"} expression |
+  expression !shift BitOp{"<<" | ">>"} expression |
+  expression !plus ArithOp{"+" | "-"} expression |
+  expression !times ArithOp{"*" | "@" | "/" | "%" | "//"} expression |
+  expression !power ArithOp{"**"} expression
+}
+
+ArgList { "(" commaSep<argument>? ")" }
+
+argument { test compFor? | VariableName AssignOp{"=" | ":="} test compFor? | "**" test | "*" test }
+
+compFor {
+  kw<"async">? kw<"for"> commaSep<expression> kw<"in"> testInner (compFor | compIf)?
+}
+
+compIf {
+  kw<"if"> testNoCond (compFor | compIf)?
+}
+
+// FIXME Is it possible to distinguish between VariableName and VariableDefinition?
+
+VariableName { identifier }
+
+PropertyName { word }
+
+dottedName { VariableName ("." VariableName)* }
+
+kw<term> { @specialize[@name={term}]<identifier, term> }
+
+skw<term> { @extend[@name={term}]<identifier, term> }
 
 @skip {} {
   String {
-    '"' (stringContentDouble)* ('"' | "\n") |
-    "'" (stringContentSingle)* ("'" | "\n")
+    shortString |
+    longStringStart<"'"> longString1Content* "'''" |
+    longStringStart<'"'> longString2Content* '"""'
+  }
+
+  FormatString {
+    formatStringStart<"'"> (formatString1Content | FormatReplacement<formatString1Brace>)* formatString1End |
+    formatStringStart<'"'> (formatString2Content | FormatReplacement<formatString2Brace>)* formatString2End |
+    longFormatStringStart<"'"> (formatString1lContent | FormatReplacement<formatString1lBrace>)* formatString1lEnd |
+    longFormatStringStart<'"'> (formatString2lContent | FormatReplacement<formatString2lBrace>)* formatString2lEnd
+  }
+
+  formatStringSpec { FormatSpec { ":" (formatStringSpecChars | FormatReplacement<"{">)* } "}" }
+
+  blankLine {
+    blankLineStart space? Comment? newline
   }
 }
 
-semi { ";" }
+FormatReplacement<start> { start (YieldExpression | commaSep<"*"? test>) FormatConversion? (formatStringSpec | "}") }
+
+@context trackIndent from "./tokens.js"
+
+@external tokens legacyPrint from "./tokens.js" { printKeyword[@name="print"] }
+
+@external tokens indentation from "./tokens" { indent, dedent }
+
+@external tokens newlines from "./tokens" { newline, blankLineStart, newlineBracketed, eof }
+
+@external tokens formatString1 from "./tokens" { formatString1Content, formatString1Brace[@name="{"], formatString1End }
+@external tokens formatString2 from "./tokens" { formatString2Content, formatString2Brace[@name="{"], formatString2End }
+@external tokens formatString1l from "./tokens" { formatString1lContent, formatString1lBrace[@name="{"], formatString1lEnd }
+@external tokens formatString2l from "./tokens" { formatString2lContent, formatString2lBrace[@name="{"], formatString2lEnd }
+
+@tokens {
+  CompareOp { "<" | ">" | $[<>=!] "=" | "<>" }
+
+  UpdateOp { ($[+\-@%&|^] | "<<" | ">>" | "*" "*"? | "/" "/"?) "=" }
+
+  @precedence {
+    longStringStart<"'">, longStringStart<'"'>, longFormatStringStart<"'">, longFormatStringStart<'"'>,
+    shortString, formatStringStart<"'">, formatStringStart<'"'>,
+    identifier
+  }
+
+  identifierChar { @asciiLetter | $[_\u{a1}-\u{10ffff}] }
+
+  word { identifierChar (@digit | identifierChar)* }
+
+  identifier { word }
+
+  stringPrefix { $[rRuUbB] | $[bB] $[rR] | $[rR] $[bR] }
+
+  formatPrefix { $[fF] | $[fF] $[rR] | $[rR] $[fF] }
+
+  shortString { stringPrefix? ("'" (!['\\\n\r] | "\\" _)* "'"? | '"' (!["\\\n\r] | "\\" _)* '"'?) }
+
+  formatStringStart<quote> { formatPrefix quote }
+
+  FormatConversion { "!" $[sra] }
+
+  formatStringSpecChars { ![{}]+ }
+
+  longStringStart<quote> { stringPrefix? quote quote quote }
+
+  longString1Content { (!['\\] | "\\" _ | "'" longString1_2)+ }
+  longString1_2 { !['\\] | "\\" _ | "'" longString1_3 }
+  longString1_3 { !['\\] | "\\" _ }
+
+  longString2Content { (!["\\] | "\\" _ | '"' longString2_2)+ }
+  longString2_2 { !["\\] | "\\" _ | '"' longString2_3 }
+  longString2_3 { !["\\] | "\\" _ }
+
+  longFormatStringStart<quote> { formatPrefix quote quote quote }
+
+  Number {
+    (@digit ("_" | @digit)* ("." @digit ("_" | @digit)*)? | "." @digit ("_" | @digit)*)
+      ($[eE] $[+\-]? @digit ("_" | @digit)*)? $[jJ]? |
+    "0" $[bB] $[_01]+ |
+    "0" $[oO] $[_0-7]+ |
+    "0" $[xX] $[_0-9a-fA-F]+
+  }
+
+  Comment { "#" ![\n\r]* }
+
+  space { ($[ \t\f] | "\\" $[\n\r])+ }
+
+  At { "@" }
+
+  "..."[@name=Ellipsis]
+
+  "("[@export=ParenL] ")"
+  "["[@export=BracketL] "]"
+  "{"[@export=BraceL] "}"
+
+  "." "," ";" ":" "@" "*" "**"
+}
+
+@external propSource pythonHighlighting from "./highlight"
+
+@detectDelim
