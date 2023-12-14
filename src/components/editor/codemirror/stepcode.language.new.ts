@@ -1,4 +1,4 @@
-import { parser } from '../../../core/language/grammar/stepcode.ts';
+import { parser } from 'lezer-stepcode'
 import { foldNodeProp, foldInside, indentNodeProp, continuedIndent, syntaxTree } from '@codemirror/language'
 import {LRLanguage, LanguageSupport} from "@codemirror/language"
 import { localCompletionSource } from '../../../core/language/grammar/complete.ts';
