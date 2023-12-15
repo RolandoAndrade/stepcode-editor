@@ -31,7 +31,10 @@ export const oneDarkTheme = createTheme({
     { tag: t.definition(t.typeName), color: '#e5c07b' },
     { tag: t.typeName, color: '#e5c07b' },
     { tag: t.angleBracket, color: '#56b6c2' },
+    { tag: t.squareBracket, color: '#e5c07b' },
     { tag: t.tagName, color: '#e06c75' },
     { tag: t.attributeName, color: '#61afef' },
+    { tag: t.function(t.variableName), color: '#61afef' },
+    { tag: t.modifier, color: '#e06c75' },
   ],
 });
