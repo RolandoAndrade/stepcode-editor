@@ -8,6 +8,7 @@ import { definitionCompletions } from './completions/definition.completions.ts';
 import { functionCompletions } from './completions/function.completions.ts';
 import { CompletionContext } from '@codemirror/autocomplete';
 import { localCompletionSource } from './completions/complete.ts';
+import { typesCompletions } from './completions/types.completions.ts';
 
 const stepCodeParser = parser.configure({
   props: [
@@ -46,6 +47,7 @@ function completeStepCode(context: CompletionContext) {
       ...conditionalsCompletions,
       ...loopCompletions,
       ...definitionCompletions,
+      ...typesCompletions,
       ...functionCompletions
     ],
     validFor: /^\w*$/,

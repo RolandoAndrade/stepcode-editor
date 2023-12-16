@@ -15,7 +15,7 @@ const cache = new NodeWeakMap<readonly Completion[]>()
 const ScopeNodes = new Set([
   'Script', 'Body',
   'Function', 'Procedure', 'LambdaExpression', 'ProgramDefinition',
-  'ForStatement', 'MatchClause'
+  'ForStatement', 'MatchClause', 'PSeIntFunction'
 ])
 
 function defID(type: string) {
@@ -33,6 +33,12 @@ const gatherCompletions: {
 } = {
   ProgramDefinition: defID('variable'),
   Function(node, def, outer) {
+    if (outer) return false
+    const id = node.node.getChild('FunctionName')
+    if (id) def(id, 'function')
+    return true
+  },
+  PSeIntFunction(node, def, outer) {
     if (outer) return false
     const id = node.node.getChild('FunctionName')
     if (id) def(id, 'function')
@@ -73,19 +79,29 @@ function getScope(doc: Text, node: SyntaxNode) {
     const name = doc.sliceString(node.from, node.to)
     if (type === 'function') {
       let params = ''
+      let details = ''
       const paramList = node.node.nextSibling
       if (paramList && paramList.name === 'ParamList') {
         for (let child = paramList.firstChild; child; child = child.nextSibling) {
           if (child.name === 'VariableParam') {
-            params += `\${${doc.sliceString(child.from, child.to)}}, `
+            const childChild = child.node.firstChild;
+            childChild?.name === 'VariableName' && (params += `\${${doc.sliceString(childChild.from, childChild.to)}}, `)
+            childChild?.name === 'VariableName' && (details += `<${doc.sliceString(childChild.from, childChild.to)}>, `)
           }
         }
         params = params.slice(0, -2)
+        details = details.slice(0, -2)
+        details = `(${details})`
+        const parent = node.node.parent!;
+        if (parent.name === 'Function') {
+          const returnType = parent.node.getChild('VariableType')
+          returnType && (details += `→ ${doc.sliceString(returnType.from, returnType.to)}`)
+        }
       }
       
       completions.push(snip(`${name}(${params})\${}`,{
         label: name, type,
-        detail: `${name}(${params})`
+        detail: `${name}${details}`,
       }))
       return;
     }

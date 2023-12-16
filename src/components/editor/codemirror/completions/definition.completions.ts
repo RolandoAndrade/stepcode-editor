@@ -4,7 +4,9 @@ export const definitionCompletions: Completion[] = [
   snippetCompletion("Definir ${Variable} Como ${TipoVariable};${}",   {
     label: "Definir",
     type: "keyword",
-    detail: "Define una variable",
+    info: "Define una variable",
+    detail: "Definir <variable> Como <tipo de variable>",
+    section: 'Definición de variables'
   }),
   snippetCompletion("por Referencia", {
     label: "Variable por Referencia",
@@ -15,31 +17,6 @@ export const definitionCompletions: Completion[] = [
     label: "Variable por Valor",
     type: "keyword",
     detail: "Define un parámetro por valor. Los parámetros por valor se utilizan para pasar valores a un subproceso.",
-  }),
-  snippetCompletion("Entero", {
-    label: "Entero",
-    type: "type",
-    detail: "Define una variable de tipo entero",
-  }),
-  snippetCompletion("Real", {
-    label: "Real",
-    type: "type",
-    detail: "Define una variable de tipo real",
-  }),
-  snippetCompletion("Logico", {
-    label: "Logico",
-    type: "type",
-    detail: "Define una variable de tipo lógico",
-  }),
-  snippetCompletion("Caracter", {
-    label: "Caracter",
-    type: "type",
-    detail: "Define una variable de tipo caracter",
-  }),
-  snippetCompletion("Cadena", {
-    label: "Cadena",
-    type: "type",
-    detail: "Define una variable de tipo cadena",
   }),
   snippetCompletion("Dimension ${1:Variable}[${2:Dimensiones}];${}", {
     label: "Dimension",
