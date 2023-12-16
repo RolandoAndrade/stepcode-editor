@@ -46,4 +46,11 @@ export const typesCompletions: Completion[] = [
       rank: 0
     }
   }),
+  snippetCompletion("Como", {
+    label: "Como",
+    type: "keyword",
+    detail: "Como <tipo de variable>",
+    info: "Palabra reservada para definir el tipo de una variable",
+    section: 'Definición de variables'
+  }),
 ]

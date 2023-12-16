@@ -1,5 +1,5 @@
 import { parser } from 'lezer-stepcode'
-import { foldNodeProp, foldInside, indentNodeProp, syntaxTree } from '@codemirror/language'
+import { foldNodeProp, foldInside, indentNodeProp, syntaxTree, continuedIndent } from '@codemirror/language'
 import {LRLanguage, LanguageSupport} from "@codemirror/language"
 import { conditionalsCompletions } from './completions/conditionals.completions.ts';
 import { structuresCompletions } from './completions/structures.completions.ts';
@@ -9,22 +9,42 @@ import { functionCompletions } from './completions/function.completions.ts';
 import { CompletionContext } from '@codemirror/autocomplete';
 import { localCompletionSource } from './completions/complete.ts';
 import { typesCompletions } from './completions/types.completions.ts';
+import { getNamedScope } from './lezer-helpers.ts';
+import { paramsCompletions } from './completions/params.completions.ts';
 
 const stepCodeParser = parser.configure({
   props: [
-    indentNodeProp.add({
-      Script: context => context.column(context.node.from) + context.unit
-    }),
     foldNodeProp.add({
       Script: foldInside
-    })
+    }),
+    indentNodeProp.add({
+      IfStatement: continuedIndent({except: /^\s*({|else\b)/}),
+      ProgramDefinition: continuedIndent(),
+      Function: continuedIndent(),
+      Procedure: continuedIndent(),
+    }),
   ]
 })
 
 export const stepCodeLanguage = LRLanguage.define({
-  parser: stepCodeParser.configure({}),
+  parser: stepCodeParser.configure({
+  }),
   languageData: {}
 })
+
+const genericCompletions = [
+  ...conditionalsCompletions,
+  ...loopCompletions,
+  ...definitionCompletions,
+  ...functionCompletions
+]
+
+const completionsMap = new Map([
+  ['Script', structuresCompletions],
+  ['ParamList', [...typesCompletions, ...paramsCompletions]],
+  ['DefineStatement', typesCompletions],
+  ['VariableType', typesCompletions],
+])
 
 function completeStepCode(context: CompletionContext) {
   const word = context.matchBefore(/\w*/)
@@ -32,24 +52,11 @@ function completeStepCode(context: CompletionContext) {
     return null
   const tree = syntaxTree(context.state)
   const node = tree.resolveInner(context.pos, -1)
-  if (node.parent?.name === 'Script') {
-    return {
-      from: word?.from ?? context.pos,
-      options: [
-        ...structuresCompletions,
-      ],
-      validFor: /^\w*$/,
-    }
-  }
+  const currentScope = getNamedScope(node.node) || ''
+  const options = completionsMap.get(currentScope) ?? genericCompletions
   return {
     from: word?.from ?? context.pos,
-    options: [
-      ...conditionalsCompletions,
-      ...loopCompletions,
-      ...definitionCompletions,
-      ...typesCompletions,
-      ...functionCompletions
-    ],
+    options,
     validFor: /^\w*$/,
   }
 }

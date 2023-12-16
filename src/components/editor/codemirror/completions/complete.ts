@@ -102,10 +102,17 @@ function getScope(doc: Text, node: SyntaxNode) {
       completions.push(snip(`${name}(${params})\${}`,{
         label: name, type,
         detail: `${name}${details}`,
+        section: {
+          name: 'Funciones y procedimientos',
+          rank: -1
+        }
       }))
       return;
     }
-    completions.push({label: name, type})
+    completions.push({label: name, type, section: {
+      name: 'Variables definidas',
+      rank: -2
+    }})
   }
 
   node.cursor(IterMode.IncludeAnonymous).iterate(node => {
