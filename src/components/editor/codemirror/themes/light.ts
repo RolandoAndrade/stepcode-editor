@@ -15,7 +15,7 @@ export const atomLightTheme = createTheme({
   },
   styles: [
     { tag: t.comment, color: '#a0a1a7' },
-    { tag: t.variableName, color: '#e45649' },
+    { tag: t.variableName, color: '#222' },
     { tag: [t.string, t.special(t.brace)], color: '#50a14f' },
     { tag: t.number, color: '#986801' },
     { tag: t.bool, color: '#986801' },
@@ -28,5 +28,7 @@ export const atomLightTheme = createTheme({
     { tag: t.angleBracket, color: '#383a42' },
     { tag: t.tagName, color: '#e45649' },
     { tag: t.attributeName, color: '#e45649' },
+    { tag: t.function(t.variableName), color: '#e45649' },
+    { tag: t.modifier, color: '#e45649' },
   ],
 });
