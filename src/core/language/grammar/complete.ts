@@ -7,7 +7,7 @@ const cache = new NodeWeakMap<readonly Completion[]>()
 
 const ScopeNodes = new Set([
   "Script", "Block",
-  "FunctionExpression", "FunctionDeclaration", "ArrowFunction", "MethodDeclaration",
+  "FunctionExpression", "Function", "Procedure",
   "ForStatement", "ProgramDefinition"
 ])
 
@@ -65,8 +65,7 @@ function getScope(doc: Text, node: SyntaxNode) {
 const Identifier = /^[\w$\xa1-\uffff][\w$\d\xa1-\uffff]*$/
 
 export const dontComplete = [
-  "TemplateString", "String", "RegExp",
-  "LineComment", "BlockComment",
+  "TemplateString", "String", "RegExp", "Comment",
   "VariableDefinition", "TypeDefinition", "Label",
   "PropertyDefinition", "PropertyName",
   "PrivatePropertyDefinition", "PrivatePropertyName",

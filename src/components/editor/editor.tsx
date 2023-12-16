@@ -6,8 +6,7 @@ import { EditorView, placeholder } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { keymap } from '@codemirror/view';
 import { defaultKeymap, indentWithTab } from '@codemirror/commands'
-import { stepCode, stepCodeLanguage } from './codemirror/stepcode.language.new.ts';
-import { stepcodeCompletions } from './codemirror/completions/stepcode.completions.ts';
+import { stepCode } from './codemirror/stepcode.language.new.ts';
 import { indentUnit } from '@codemirror/language';
 import { stepcodeLinter } from './codemirror/stepcode.linter.ts';
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';

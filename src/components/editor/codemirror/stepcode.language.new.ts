@@ -1,44 +1,27 @@
 import { parser } from 'lezer-stepcode'
-import { foldNodeProp, foldInside, indentNodeProp, continuedIndent, syntaxTree } from '@codemirror/language'
+import { foldNodeProp, foldInside, indentNodeProp, syntaxTree } from '@codemirror/language'
 import {LRLanguage, LanguageSupport} from "@codemirror/language"
-import { localCompletionSource } from '../../../core/language/grammar/complete.ts';
 import { conditionalsCompletions } from './completions/conditionals.completions.ts';
 import { structuresCompletions } from './completions/structures.completions.ts';
 import { loopCompletions } from './completions/loop.completions.ts';
 import { definitionCompletions } from './completions/definition.completions.ts';
 import { functionCompletions } from './completions/function.completions.ts';
 import { CompletionContext } from '@codemirror/autocomplete';
+import { localCompletionSource } from './completions/complete.ts';
 
 const stepCodeParser = parser.configure({
   props: [
     indentNodeProp.add({
-      Application: context => context.column(context.node.from) + context.unit
+      Script: context => context.column(context.node.from) + context.unit
     }),
     foldNodeProp.add({
-      Application: foldInside
+      Script: foldInside
     })
   ]
 })
 
 export const stepCodeLanguage = LRLanguage.define({
-  parser: stepCodeParser.configure({
-    props:[
-      indentNodeProp.add({
-        IfStatement: continuedIndent({except: /^\s*({|sino|finsi\b)/}),
-
-      }),
-      foldNodeProp.add({
-        "ProgramDefinition IfStatement SwitchStatement": (node)=> {
-          const children = node.getChildren('Body').concat(node.getChildren('SwitchBody'))
-          if (children.length === 0) return null
-          return {
-            from: children[0].prevSibling?.to ?? children[0].from,
-            to: children[children.length - 1].to
-          }
-        }
-      })
-    ]
-  }),
+  parser: stepCodeParser.configure({}),
   languageData: {}
 })
 
