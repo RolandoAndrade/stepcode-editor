@@ -37,3 +37,20 @@ export const loopCompletions: Completion[] = [
     section: 'Estructuras repetitivas'
   }),
 ]
+
+export const insideLoopCompletions: Completion[] = [
+  snippetCompletion("Continuar;",   {
+    label: "Continuar",
+    type: "keyword",
+    info: "Continúa con la siguiente iteración del ciclo.",
+    detail: "Continuar",
+    section: 'Estructuras repetitivas'
+  }),
+  snippetCompletion("Romper;",   {
+    label: "Romper",
+    type: "keyword",
+    info: "Termina la ejecución del ciclo.",
+    detail: "Salir",
+    section: 'Estructuras repetitivas'
+  }),
+]

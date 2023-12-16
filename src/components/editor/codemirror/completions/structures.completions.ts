@@ -72,5 +72,18 @@ export const structuresCompletions: Completion[] = [
       name: 'Bloques de código',
       rank: -3
     }
+  })
+]
+
+export const insideFunctionsCompletions: Completion[] = [
+  snippetCompletion("Retornar ${Valor};",     {
+    label: "Retornar",
+    type: "keyword",
+    info: "Retorna un valor en una función.",
+    detail: "Retornar <valor>",
+    section: {
+      name: 'Bloques de código',
+      rank: -3
+    }
   }),
 ]

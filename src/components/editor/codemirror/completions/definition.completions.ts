@@ -11,6 +11,8 @@ export const definitionCompletions: Completion[] = [
   snippetCompletion("Dimension ${1:Variable}[${2:Dimensiones}];${}", {
     label: "Dimension",
     type: "keyword",
-    detail: "Define una variable de tipo arreglo. Los arreglos son variables que almacenan varios valores.",
+    info: "Define una variable de tipo arreglo. Los arreglos son variables que almacenan varios valores.",
+    detail: "Dimension <variable>[<dimensiones>]",
+    section: 'Definición de variables'
   })
 ]

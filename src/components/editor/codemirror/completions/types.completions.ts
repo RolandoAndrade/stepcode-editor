@@ -46,6 +46,9 @@ export const typesCompletions: Completion[] = [
       rank: 0
     }
   }),
+]
+
+export const asCompletions: Completion[] = [
   snippetCompletion("Como", {
     label: "Como",
     type: "keyword",

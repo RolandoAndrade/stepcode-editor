@@ -2,13 +2,13 @@ import { parser } from 'lezer-stepcode'
 import { foldNodeProp, foldInside, indentNodeProp, syntaxTree, continuedIndent } from '@codemirror/language'
 import {LRLanguage, LanguageSupport} from "@codemirror/language"
 import { conditionalsCompletions } from './completions/conditionals.completions.ts';
-import { structuresCompletions } from './completions/structures.completions.ts';
-import { loopCompletions } from './completions/loop.completions.ts';
+import { insideFunctionsCompletions, structuresCompletions } from './completions/structures.completions.ts';
+import { insideLoopCompletions, loopCompletions } from './completions/loop.completions.ts';
 import { definitionCompletions } from './completions/definition.completions.ts';
 import { functionCompletions } from './completions/function.completions.ts';
 import { CompletionContext } from '@codemirror/autocomplete';
 import { localCompletionSource } from './completions/complete.ts';
-import { typesCompletions } from './completions/types.completions.ts';
+import { asCompletions, typesCompletions } from './completions/types.completions.ts';
 import { getNamedScope } from './lezer-helpers.ts';
 import { paramsCompletions } from './completions/params.completions.ts';
 
@@ -41,9 +41,16 @@ const genericCompletions = [
 
 const completionsMap = new Map([
   ['Script', structuresCompletions],
-  ['ParamList', [...typesCompletions, ...paramsCompletions]],
-  ['DefineStatement', typesCompletions],
+  ['ParamList', [...typesCompletions, ...paramsCompletions, ...asCompletions]],
+  ['DefineStatement', [...typesCompletions, ...asCompletions]],
   ['VariableType', typesCompletions],
+  ['ForStatement', [...genericCompletions, ...insideLoopCompletions]],
+  ['WhileStatement', [...genericCompletions, ...insideLoopCompletions]],
+  ['RepeatStatement', [...genericCompletions, ...insideLoopCompletions]],
+  ['Function', [
+    ...genericCompletions,
+    ...insideFunctionsCompletions,
+  ]]
 ])
 
 function completeStepCode(context: CompletionContext) {
@@ -52,6 +59,8 @@ function completeStepCode(context: CompletionContext) {
     return null
   const tree = syntaxTree(context.state)
   const node = tree.resolveInner(context.pos, -1)
+  if (['ProgramName', 'FunctionName', 'ProcedureName'].includes(node.node.name))
+    return null
   const currentScope = getNamedScope(node.node) || ''
   const options = completionsMap.get(currentScope) ?? genericCompletions
   return {

@@ -1,9 +1,9 @@
 import { SyntaxNode } from '@lezer/common';
 
 const nodes = [
-  'Script', 'Block',
+  'Script', 'ProgramDefinition',
   'Function', 'Procedure', 'PSeIntFunction', 'ParamList',
-  'DefineStatement', 'VariableType'
+  'DefineStatement', 'VariableType', 'ForStatement', 'WhileStatement', 'RepeatStatement'
 ] as const
 
 type ScopeNode = typeof nodes[number]
