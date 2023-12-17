@@ -6,8 +6,7 @@ import { EditorView, placeholder } from '@codemirror/view';
 import { basicSetup } from 'codemirror';
 import { keymap } from '@codemirror/view';
 import { defaultKeymap, indentWithTab } from '@codemirror/commands'
-import { stepCodeLanguage } from './codemirror/stepcode.language.ts';
-import { stepcodeCompletions } from './codemirror/completions/stepcode.completions.ts';
+import { stepCode } from './codemirror/stepcode.language.ts';
 import { indentUnit } from '@codemirror/language';
 import { stepcodeLinter } from './codemirror/stepcode.linter.ts';
 import { indentationMarkers } from '@replit/codemirror-indentation-markers';
@@ -56,8 +55,7 @@ export function Editor() {
         keymap.of([...defaultKeymap, indentWithTab]),
         theme === 'dark' ? oneDarkTheme : atomLightTheme,
         foldOnIndent(),
-        stepCodeLanguage,
-        stepcodeCompletions,
+        stepCode(),
         indentUnit.of('    '),
         stepcodeLinter,
         indentationMarkers({
