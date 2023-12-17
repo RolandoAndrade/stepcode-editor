@@ -18,10 +18,15 @@ const stepCodeParser = parser.configure({
       Script: foldInside
     }),
     indentNodeProp.add({
-      IfStatement: continuedIndent({except: /^\s*({|else\b)/}),
+      IfStatement: continuedIndent(),
       ProgramDefinition: continuedIndent(),
       Function: continuedIndent(),
       Procedure: continuedIndent(),
+      ForStatement: continuedIndent(),
+      WhileStatement: continuedIndent(),
+      RepeatStatement: continuedIndent(),
+      SwitchStatement: continuedIndent(),
+      SwitchBody: continuedIndent(),
     }),
   ]
 })
